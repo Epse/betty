@@ -5,45 +5,45 @@ import {
     ChannelType,
     ChatInputCommandInteraction,
     SlashCommandBuilder,
-    TextChannel
 } from "discord.js";
 import {Command} from "../../types/command";
 import {BoardAuthorization, PublicAuthorization, RoleAuthorization} from "../../authorization/authorize";
+import * as Config from '../../../config.json';
 
 
 const cmd = new SlashCommandBuilder()
-      .setName('loa')
-      .setDescription('Announce a new LOA')
-      .addStringOption(option => {
-          option.setName('fir')
-                .setDescription('The FIR the LOA is with')
-                .setRequired(true);
+    .setName('loa')
+    .setDescription('Announce a new LOA')
+    .addStringOption(option => {
+        option.setName('fir')
+            .setDescription('The FIR the LOA is with')
+            .setRequired(true);
 
-          const ll = Object.keys(loas).map(l => {
-              return {name: l, value: l};
-          });
-          option.addChoices(...ll);
-          return option;
-      })
-      .addChannelOption(option =>
-          option.setName('channel')
-                .setDescription('Channel to post in')
-                .setRequired(true)
-                .addChannelTypes(ChannelType.GuildText)
-      )
-      .addStringOption(option =>
-          option.setName('text')
-                .setDescription('Extra text to mention in the announcement')
-                .setRequired(false)
-      );
+        const ll = Object.keys(loas).map(l => {
+            return {name: l, value: l};
+        });
+        option.addChoices(...ll);
+        return option;
+    })
+    .addChannelOption(option =>
+        option.setName('channel')
+            .setDescription('Channel to post in')
+            .setRequired(true)
+            .addChannelTypes(ChannelType.GuildText)
+    )
+    .addStringOption(option =>
+        option.setName('text')
+            .setDescription('Extra text to mention in the announcement')
+            .setRequired(false)
+    );
 
 const execute = async (interaction: ChatInputCommandInteraction) => {
     const loa = loas[interaction.options.getString('fir')].name;
     const channel = interaction.options.getChannel('channel');
     const text = interaction.options.getString('text');
 
-    let infoMessage = `<@&${process.env.ATC_ROLE_ID}> <@&${process.env.VISITING_ATC_ROLE_ID}>
-Please check the following updated LoA's on our website:\n`;
+    let infoMessage = Config.loa.mention_roles.map(x => `<@&${x}>`).join(' ');
+    infoMessage += "Please check the following updated LoA's on our website:\n";
     infoMessage += '------------------------------------\n';
     infoMessage += `**${loa}**\n`;
     infoMessage += '------------------------------------\n';

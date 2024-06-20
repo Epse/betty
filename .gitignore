@@ -144,3 +144,4 @@ dist
 
 .idea/
 .gitlab-ci.yml
+config.json

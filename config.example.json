@@ -1,0 +1,26 @@
+{
+  "name": "Nomi",
+  "voice": {
+    "autogen_channels": {
+      "test": "1253354012888141824"
+    }
+  },
+  "events": {
+    "announcement_channel_id": "1253343601367322664"
+  },
+  "backup_request": {
+    "ignore_uids": [
+      "123"
+    ],
+    "delete_after_minutes": 1,
+    "channel_id": "916615781456965633"
+  },
+  "permissions": {
+    "all_access": "Board"
+  },
+  "loa": {
+    "mention_roles": [
+      "12323"
+    ]
+  }
+}

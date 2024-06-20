@@ -1,6 +1,7 @@
 import {SubCommand} from "../../types/command";
 import {ChannelType, EmbedBuilder, GuildMember, SlashCommandSubcommandBuilder} from "discord.js";
 import {ThreadAutoArchiveDuration} from 'discord-api-types/v10';
+import * as Config from '../../../config.json';
 
 export default {
     name: 'thread',
@@ -15,7 +16,7 @@ export default {
             )
     ,
     execute: async interaction => {
-        const channel = await interaction.client.channels.fetch(process.env.EVENTS_CHANNEL_ID);
+        const channel = await interaction.client.channels.fetch(Config.events.announcement_channel_id);
         const title = interaction.options.getString('title');
 
         if (channel === null || channel.type !== ChannelType.GuildText) {

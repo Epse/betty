@@ -1,17 +1,17 @@
 import dayjs from "dayjs";
 import {Client} from "../types/client";
 import {BaseGuildTextChannel, Channel, ChannelType} from "discord.js";
+import * as Config from '../../config.json';
 
-const THRESHOLD_MIN = Number.parseInt(process.env.BACKUP_REQUEST_AUTO_DELETE_AFTER_MIN);
+const THRESHOLD_MIN = Config.backup_request.delete_after_minutes;
 const threshold = () => dayjs().subtract(THRESHOLD_MIN, 'minutes');
-const dynoUid = process.env.DYNO_USER_ID;
 
 export default async (client: Client) => {
-    if (process.env.BACKUP_REQUEST_CHANNEL.length === 0) {
+    if (Config.backup_request.channel_id.length === 0) {
         return; // nop
     }
 
-    const channel: Channel | null = await client.channels.fetch(process.env.BACKUP_REQUEST_CHANNEL);
+    const channel: Channel | null = await client.channels.fetch(Config.backup_request.channel_id);
     if (channel === null) {
         console.warn("Backup request channel does not exist");
         return;
@@ -21,13 +21,14 @@ export default async (client: Client) => {
         return;
     }
 
-    channel.messages.fetch({ limit: 100 })
+    channel.messages.fetch({limit: 100})
         .then((messages) => {
             if (messages.size !== 1) {
                 console.info(`Fetched messages from ${channel.name}: ${messages.size}`);
             }
             messages.forEach((message) => {
-                if (dayjs(message.createdTimestamp).isBefore(threshold()) && message.author.id !== dynoUid) {
+                if (dayjs(message.createdTimestamp).isBefore(threshold())
+                    && Config.backup_request.ignore_uids.findIndex(x => x === message.author.id) === -1) {
                     message.delete()
                         .then((deletedMessage) => console.log(`Deleted 1 message from ${deletedMessage.channel.name}`))
                         .catch((e) => console.log(e.httpStatus, e.message, e.path));
