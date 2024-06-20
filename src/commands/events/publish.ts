@@ -1,11 +1,10 @@
-import {Command} from "../../types/command";
-import {BoardAuthorization} from "../../authorization/authorize";
+import {SubCommand} from "../../types/command";
 import {
     BaseGuildTextChannel,
     ChannelType,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    SlashCommandBuilder
+    SlashCommandSubcommandBuilder
 } from "discord.js";
 import {makeTimestamp} from "../../util/timestamp";
 
@@ -20,21 +19,22 @@ async function getStatsimLink(vatsimId: string): Promise<string> {
 }
 
 export default {
-    authorizedFor: new BoardAuthorization(),
-    data: new SlashCommandBuilder()
-        .setName('event')
-        .setDescription('Publish a MyVatsim event to a discord channel')
-        .addStringOption(option =>
-            option.setName('id')
-                .setRequired(true)
-                .setDescription('The ID of an event on MyVatsim')
-        )
-        .addChannelOption(option =>
-            option.setName('channel')
-                .setDescription('Channel to post in')
-                .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
-                .setRequired(true)
-        ),
+    name: 'publish',
+    make: (command: SlashCommandSubcommandBuilder): SlashCommandSubcommandBuilder =>
+        command
+            .setName('publish')
+            .setDescription('Publish a MyVatsim event to a discord channel')
+            .addStringOption(option =>
+                option.setName('id')
+                    .setRequired(true)
+                    .setDescription('The ID of an event on MyVatsim')
+            )
+            .addChannelOption(option =>
+                option.setName('channel')
+                    .setDescription('Channel to post in')
+                    .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                    .setRequired(true)
+            ),
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const id = interaction.options.getString('id');
         const channel = interaction.options.getChannel('channel') as BaseGuildTextChannel;
@@ -48,7 +48,6 @@ export default {
             });
             return;
         }
-
 
 
         const event = (await response.json())['data'];
@@ -83,4 +82,4 @@ export default {
         });
     }
 
-} satisfies Command;
+} satisfies SubCommand;
