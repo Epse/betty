@@ -1,5 +1,5 @@
 {
-    "extends": "airbnb-base",
+    "extends": "recommended",
     "rules": {
         "arrow-body-style": "off",
         "comma-dangle": ["error", "never"],

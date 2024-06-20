@@ -7,8 +7,7 @@
     "debug": "npx ts-node src/server.ts",
     "types": "npx tsc --noEmit",
     "commands": "npx ts-node src/deploy-commands.ts",
-    "lint": "eslint .",
-    "release": "release-it"
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -24,10 +23,9 @@
   },
   "devDependencies": {
     "discord-api-types": "^0.37.90",
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^9.5.0",
     "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
     "typescript": "^5.4.5"
   }
 }
