@@ -9,7 +9,7 @@ require('dotenv').config();
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(Config.name)
+        .setName(Config.name.toLowerCase())
         .setDescription(`Explain ${Config.name} functionality.`),
     async execute(interaction) {
         await interaction.reply({
