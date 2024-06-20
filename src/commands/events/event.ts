@@ -3,10 +3,12 @@ import {BoardAuthorization} from "../../authorization/authorize";
 import {ChatInputCommandInteraction, SlashCommandBuilder} from "discord.js";
 import publish from "./publish";
 import thread from "./thread";
+import roster from "./roster";
 
 const subcommands = [
     publish,
     thread,
+    roster,
 ];
 let data = new SlashCommandBuilder()
     .setName('event')
