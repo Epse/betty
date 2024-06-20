@@ -1,6 +1,12 @@
 import {loas} from '../../resources/loa';
 
-import {ChannelType, ChatInputCommandInteraction, SlashCommandBuilder, TextChannel} from "discord.js";
+import {
+    BaseGuildTextChannel,
+    ChannelType,
+    ChatInputCommandInteraction,
+    SlashCommandBuilder,
+    TextChannel
+} from "discord.js";
 import {Command} from "../../types/command";
 import {BoardAuthorization, PublicAuthorization, RoleAuthorization} from "../../authorization/authorize";
 
@@ -46,7 +52,7 @@ Please check the following updated LoA's on our website:\n`;
         infoMessage += `\n\n${text}`;
     }
 
-    if (channel.type !== ChannelType.GuildText) {
+    if (!(channel instanceof BaseGuildTextChannel)) {
         console.warn('LOA channel not text');
         await interaction.reply({
             ephemeral: true,
@@ -54,7 +60,7 @@ Please check the following updated LoA's on our website:\n`;
         });
         return;
     }
-    await (channel as TextChannel).send(infoMessage);
+    await (channel as BaseGuildTextChannel).send(infoMessage);
 
     await interaction.reply({
         ephemeral: true,

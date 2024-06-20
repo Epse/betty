@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import {Client} from "../types/client";
-import {Channel, ChannelType} from "discord.js";
+import {BaseGuildTextChannel, Channel, ChannelType} from "discord.js";
 
 const THRESHOLD_MIN = Number.parseInt(process.env.BACKUP_REQUEST_AUTO_DELETE_AFTER_MIN);
 const threshold = () => dayjs().subtract(THRESHOLD_MIN, 'minutes');
@@ -12,7 +12,7 @@ export default async (client: Client) => {
         console.warn("Backup request channel does not exist");
         return;
     }
-    if (channel.type !== ChannelType.GuildText) {
+    if (!(channel instanceof BaseGuildTextChannel)) {
         console.warn("Backup request channel is not a text channel");
         return;
     }
