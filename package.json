@@ -2,7 +2,6 @@
   "name": "belux-discord-admin-bot",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "server.ts",
   "scripts": {
     "debug": "npx ts-node src/server.ts",

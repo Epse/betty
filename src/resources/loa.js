@@ -1,4 +1,4 @@
-exports.loas = {
+export default {
     ebbu: {
         name: '🇧🇪 LoA Belux vACC Maastricht UAC - Brussels ACC'
     },

@@ -1,4 +1,4 @@
-import {loas} from '../../resources/loa';
+import loas from '../../resources/loa';
 
 import {
     BaseGuildTextChannel,
