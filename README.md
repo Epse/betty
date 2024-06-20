@@ -14,6 +14,20 @@ You will find an example in this repo, as well as stricter typings in `config.ts
 A very limited subset of sensitive configuration options are set via environment variable or `.env` file.
 You will find these documented in `.env.example`.
 
+## Deployment
+
+Betty is available as a Docker image under `stefpletinck/betty`.
+There are immutable version tags that follow the Releases on GitHub,
+as well as a `latest` tag.
+
+One thing to keep in mind is that Betty does not automatically manage command registration.
+If you update Betty and the update adds or changes commands,
+you will need to run the `deploy-commands.ts` script.
+
+You can use the compiled `.js` version in the Docker container for that,
+or even a local checkout of the same version of code.
+The guild id is the only important field to match here.
+
 ## Licensing
 
 See the LICENSE file for more info.
