@@ -6,8 +6,14 @@ import {Collection, GatewayIntentBits} from 'discord.js';
 import commands from './commands/commands';
 import {events} from './events/events';
 import deleteMessages from './workers/delete-messages';
+import path from "path";
+import fs from "fs";
+import {Config} from "./types/config";
 
 const client: Client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
+
+const configPath = path.join(__dirname, 'config.json');
+global.config = <Config>JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
 // Run each 60 seconds
 setInterval(async () => await deleteMessages( client ), 60 * 1000);

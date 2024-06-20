@@ -9,7 +9,7 @@ Elizabeth was built by Jeroen, Babs by Stef (not the author of this bot).
 ## Configuration
 
 Most configuration is done via a config.json file.
-You will find an example in this repo, as well as stricter typings in `typings.d.ts`.
+You will find an example in this repo, as well as stricter typings in `config.ts`.
 
 A very limited subset of sensitive configuration options are set via environment variable or `.env` file.
 You will find these documented in `.env.example`.

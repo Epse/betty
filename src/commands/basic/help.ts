@@ -2,23 +2,22 @@ import {Command} from "../../types/command";
 
 import {SlashCommandBuilder} from "discord.js";
 import {PublicAuthorization} from "../../authorization/authorize";
-import * as Config from '../../../config.json';
 
 require('dotenv').config();
 
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(Config.name.toLowerCase())
-        .setDescription(`Explain ${Config.name} functionality.`),
+        .setName(global.config.name.toLowerCase())
+        .setDescription(`Explain ${global.config.name} functionality.`),
     async execute(interaction) {
         await interaction.reply({
             ephemeral: true,
             content: `
-${Config.name} helps you with vACC tasks!
+${global.config.name} helps you with vACC tasks!
 Right now, you can use:
 - \`/loa\` to announce a LOA
-- \`/${Config.name.toLowerCase()}\` to view this help
+- \`/${global.config.name.toLowerCase()}\` to view this help
 - \`/atis\` to view an ATIS
 - \`/event\` to publish an event
 

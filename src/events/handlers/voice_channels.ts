@@ -1,19 +1,20 @@
 import {EventHandler} from "../events";
 import {Events, VoiceState} from "discord.js";
-import * as Config from '../../../config.json';
+import {Client} from "../../types/client";
 
 async function leftChannel(oldState: VoiceState): Promise<void> {
     if (oldState.channel.members.size > 0)
         return; // Leave it
 
-    if (Object.keys(Config.voice.autogen_channels).findIndex(x => x == oldState.channel.name) === -1)
+    if (Object.keys(global.config.voice.autogen_channels)
+        .findIndex(x => x == oldState.channel.name) === -1)
         return; // Not our channel
 
     await oldState.channel.delete();
 }
 
 async function joinedChannel(newState: VoiceState): Promise<void> {
-    const channelName = Object.entries(Config.voice.autogen_channels)
+    const channelName = Object.entries(global.config.voice.autogen_channels)
         .find(([key, val]) => val == newState.channelId );
     if (channelName === undefined)
         return; // None of our business then

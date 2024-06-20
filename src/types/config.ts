@@ -1,20 +1,20 @@
-declare module 'config.json' {
-    export const name: string
-    export const voice: {
+export interface Config {
+    name: string,
+    voice: {
         autogen_channels: Map<string, string>
-    };
-    export const events: {
+    },
+    events: {
         announcement_channel_id: string
-    };
-    export const backup_request: {
+    },
+    backup_request: {
         ignore_uids: string[],
         delete_after_minutes: number,
         channel_id: string
-    };
-    export const permissions: {
+    },
+    permissions: {
         all_access: string
-    };
-    export const loa: {
+    },
+    loa: {
         mention_roles: string[]
-    };
+    }
 }
