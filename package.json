@@ -1,0 +1,31 @@
+{
+  "name": "belux-discord-admin-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "debug": "npx ts-node src/server.ts",
+    "types": "npx tsc --noEmit",
+    "lint": "eslint .",
+    "release": "release-it"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bufferutil": "^4.0.8",
+    "dayjs": "^1.10.7",
+    "discord.js": "^14.15.3",
+    "dotenv": "^8.2.0",
+    "mysql": "^2.18.1",
+    "utf-8-validate": "^5.0.10",
+    "zlib-sync": "^0.1.9"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
