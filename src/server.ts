@@ -10,7 +10,7 @@ import deleteMessages from './workers/delete-messages';
 const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Run each 60 seconds
-setInterval(() => deleteMessages( client ), 60 * 1000);
+setInterval(async () => await deleteMessages( client ), 60 * 1000);
 
 client.commands = new Collection();
 

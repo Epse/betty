@@ -1,6 +1,6 @@
 import {loas} from '../../resources/loa';
 
-import {ChannelType, SlashCommandBuilder} from "discord.js";
+import {ChannelType, ChatInputCommandInteraction, SlashCommandBuilder, TextChannel} from "discord.js";
 import {Command} from "../../types/command";
 
 
@@ -30,7 +30,7 @@ const cmd = new SlashCommandBuilder()
                 .setRequired(false)
       );
 
-const execute = async interaction => {
+const execute = async (interaction: ChatInputCommandInteraction) => {
     const loa = loas[interaction.options.getString('fir')].name;
     const channel = interaction.options.getChannel('channel');
     const text = interaction.options.getString('text');
@@ -44,7 +44,15 @@ const execute = async interaction => {
         infoMessage += `\n\n${text}`;
     }
 
-    await channel.send(infoMessage);
+    if (channel.type !== ChannelType.GuildText) {
+        console.warn('LOA channel not text');
+        await interaction.reply({
+            ephemeral: true,
+            content: 'Selected channel is not a text channel'
+        });
+        return;
+    }
+    await (channel as TextChannel).send(infoMessage);
 
     await interaction.reply({
         ephemeral: true,
@@ -56,4 +64,4 @@ export default {
     data: cmd,
     execute: execute,
     authorizedFor: '',
-} as Command;
+} satisfies Command;

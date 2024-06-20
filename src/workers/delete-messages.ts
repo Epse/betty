@@ -6,8 +6,12 @@ const THRESHOLD_MIN = Number.parseInt(process.env.BACKUP_REQUEST_AUTO_DELETE_AFT
 const threshold = () => dayjs().subtract(THRESHOLD_MIN, 'minutes');
 const dynoUid = process.env.DYNO_USER_ID;
 
-export default (client: Client) => {
-    const channel: Channel = client.channels.cache.get(process.env.BACKUP_REQUEST_CHANNEL);
+export default async (client: Client) => {
+    const channel: Channel | null = await client.channels.fetch(process.env.BACKUP_REQUEST_CHANNEL);
+    if (channel === null) {
+        console.warn("Backup request channel does not exist");
+        return;
+    }
     if (channel.type !== ChannelType.GuildText) {
         console.warn("Backup request channel is not a text channel");
         return;

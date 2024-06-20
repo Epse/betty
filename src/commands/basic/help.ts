@@ -17,6 +17,7 @@ ${process.env.NAME} helps you with vACC tasks!
 Right now, you can use:
 - \`/loa\` to announce a LOA
 - \`/${process.env.NAME.toLowerCase()}\` to view this help
+- \`/atis\` to view an ATIS
 
 Type a command to view in-line documentation on its arguments and usage.
 
@@ -26,4 +27,4 @@ For more info, see [GitHub](https://github.com/Epse/betty) .
         });
     },
     authorizedFor: '',
-} as Command;
+} satisfies Command;
