@@ -6,6 +6,7 @@
   "scripts": {
     "debug": "npx ts-node src/server.ts",
     "types": "npx tsc --noEmit",
+    "commands": "npx ts-node src/deploy-commands.ts",
     "lint": "eslint .",
     "release": "release-it"
   },
