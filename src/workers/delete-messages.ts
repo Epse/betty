@@ -7,6 +7,10 @@ const threshold = () => dayjs().subtract(THRESHOLD_MIN, 'minutes');
 const dynoUid = process.env.DYNO_USER_ID;
 
 export default async (client: Client) => {
+    if (process.env.BACKUP_REQUEST_CHANNEL.length === 0) {
+        return; // nop
+    }
+
     const channel: Channel | null = await client.channels.fetch(process.env.BACKUP_REQUEST_CHANNEL);
     if (channel === null) {
         console.warn("Backup request channel does not exist");

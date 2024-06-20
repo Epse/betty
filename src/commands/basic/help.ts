@@ -19,6 +19,7 @@ Right now, you can use:
 - \`/loa\` to announce a LOA
 - \`/${process.env.NAME.toLowerCase()}\` to view this help
 - \`/atis\` to view an ATIS
+- \`/event\` to publish an event
 
 Type a command to view in-line documentation on its arguments and usage.
 
