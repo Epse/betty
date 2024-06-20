@@ -4,11 +4,15 @@ import {ChatInputCommandInteraction, SlashCommandBuilder} from "discord.js";
 import publish from "./publish";
 import thread from "./thread";
 import roster from "./roster";
+import activate from "./activate";
+import debrief from "./debrief";
 
 const subcommands = [
     publish,
     thread,
     roster,
+    activate,
+    debrief,
 ];
 let data = new SlashCommandBuilder()
     .setName('event')

@@ -30,6 +30,7 @@ export default {
             });
             return;
         }
+
         const rosterMessage = await thread.send(file.url);
         await thread.send('@everyone The roster has been posted!');
         await rosterMessage.pin();
