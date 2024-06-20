@@ -1,18 +1,35 @@
-import {Events} from "discord.js";
+import {ChatInputCommandInteraction, Events, GuildMember, Interaction} from "discord.js";
 import {EventHandler} from "../events";
+import {Client} from "../../types/client";
 
 
-// TODO authz
 export default {
     name: Events.InteractionCreate,
     once: false,
-    async execute(interaction) {
-        if (!interaction.isChatInputCommand()) return;
+    async execute(_interaction: Interaction) {
+        if (!_interaction.isChatInputCommand()) return;
+        const interaction: ChatInputCommandInteraction = _interaction as ChatInputCommandInteraction;
 
-        const command = interaction.client.commands.get(interaction.commandName);
+        const command = (interaction.client as Client).commands.get(interaction.commandName);
 
         if (!command) {
             console.error(`No command matching ${interaction.commandName} was found.`);
+            return;
+        }
+
+        let member = interaction.member;
+        if (!(member instanceof GuildMember)) {
+            member = await interaction.guild.members.fetch(member.user.id);
+        }
+        if (!member) {
+            return; // Just ignore that, shouldn't be possible anyway
+        }
+
+        if (!command.authorizedFor.allowed(member)) {
+            await interaction.reply({
+                ephemeral: true,
+                content: "☹ sorry, I can't let you do that..."
+            });
             return;
         }
 

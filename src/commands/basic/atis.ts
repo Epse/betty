@@ -1,5 +1,6 @@
 import {Command} from "../../types/command";
 import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
+import {PublicAuthorization} from "../../authorization/authorize";
 
 function buildEmbed(atis: any): EmbedBuilder {
     return new EmbedBuilder()
@@ -77,7 +78,7 @@ ${metar} `)
 }
 
 export default {
-    authorizedFor: '',
+    authorizedFor: new PublicAuthorization(),
     data: new SlashCommandBuilder()
         .setName('atis')
         .setDescription('Fetch specified ATIS or METAR from VATSIM')

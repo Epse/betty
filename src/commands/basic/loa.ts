@@ -2,6 +2,7 @@ import {loas} from '../../resources/loa';
 
 import {ChannelType, ChatInputCommandInteraction, SlashCommandBuilder, TextChannel} from "discord.js";
 import {Command} from "../../types/command";
+import {BoardAuthorization, PublicAuthorization, RoleAuthorization} from "../../authorization/authorize";
 
 
 const cmd = new SlashCommandBuilder()
@@ -35,7 +36,8 @@ const execute = async (interaction: ChatInputCommandInteraction) => {
     const channel = interaction.options.getChannel('channel');
     const text = interaction.options.getString('text');
 
-    let infoMessage = 'Please check the following updated LoA\'s on our website:\n';
+    let infoMessage = `<@&${process.env.ATC_ROLE_ID}> <@&${process.env.VISITING_ATC_ROLE_ID}>
+Please check the following updated LoA's on our website:\n`;
     infoMessage += '------------------------------------\n';
     infoMessage += `**${loa}**\n`;
     infoMessage += '------------------------------------\n';
@@ -63,5 +65,5 @@ const execute = async (interaction: ChatInputCommandInteraction) => {
 export default {
     data: cmd,
     execute: execute,
-    authorizedFor: '',
+    authorizedFor: new BoardAuthorization(),
 } satisfies Command;

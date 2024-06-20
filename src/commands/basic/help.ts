@@ -1,6 +1,7 @@
 import {Command} from "../../types/command";
 
 import {SlashCommandBuilder} from "discord.js";
+import {PublicAuthorization} from "../../authorization/authorize";
 
 require('dotenv').config();
 
@@ -26,5 +27,5 @@ For more info, see [GitHub](https://github.com/Epse/betty) .
 `
         });
     },
-    authorizedFor: '',
+    authorizedFor: new PublicAuthorization(),
 } satisfies Command;
