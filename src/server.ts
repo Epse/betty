@@ -7,7 +7,7 @@ import commands from './commands/commands';
 import {events} from './events/events';
 import deleteMessages from './workers/delete-messages';
 
-const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client: Client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 // Run each 60 seconds
 setInterval(async () => await deleteMessages( client ), 60 * 1000);
@@ -21,9 +21,21 @@ for (const command of commands) {
 
 for (const event of events) {
     if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
+        client.once(event.name, (...args) => {
+            try {
+                return event.execute(...args)
+            } catch (e) {
+                console.warn(`Caught exception while handling ${event.name}: ${e}`);
+            }
+        });
     } else {
-        client.on(event.name, (...args) => event.execute(...args));
+        client.on(event.name, (...args) => {
+            try {
+                return event.execute(...args)
+            } catch (e) {
+                console.warn(`Caught exception while handling ${event.name}: ${e}`);
+            }
+        });
     }
 }
 
