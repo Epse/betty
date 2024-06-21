@@ -2,6 +2,7 @@ import {Command} from "../../types/command";
 import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import {PublicAuthorization} from "../../authorization/authorize";
 import config from "../../util/config";
+import {makeTimestamp, TimestampFormat} from "../../util/timestamp";
 
 function buildEmbed(atis: any): EmbedBuilder {
     return new EmbedBuilder()
@@ -11,7 +12,7 @@ function buildEmbed(atis: any): EmbedBuilder {
         .addFields(
             {name: 'Frequency', value: atis['frequency'], inline: true},
             {name: 'Code', value: atis['atis_code'], inline: true},
-            {name: 'Last update', value: atis['last_updated'], inline: true},
+            {name: 'Last update', value: makeTimestamp(atis['last_updated'], TimestampFormat.DateTime), inline: true},
         )
 }
 
