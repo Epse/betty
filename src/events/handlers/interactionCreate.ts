@@ -1,7 +1,26 @@
 import {ChatInputCommandInteraction, Events, GuildMember, Interaction} from "discord.js";
 import {EventHandler} from "../events";
 import {Client} from "../../types/client";
+import {AuthorizationType} from "../../authorization/authorize";
+import {Command} from "../../types/command";
 
+async function isAuthorized(interaction: ChatInputCommandInteraction, command: Command): Promise<boolean> {
+    // For weird TS reasons, we can't use inGuild, becaused that's typed to always be true...
+    if (!interaction.guildId) {
+        return command.authorizedFor.type === AuthorizationType.Public;
+    }
+
+    let member = interaction.member;
+    if (!(member instanceof GuildMember)) {
+        member = await interaction.guild.members.fetch(member.user.id);
+    }
+    if (!member) {
+        return false; // Just ignore that, shouldn't be possible anyway
+    }
+
+    return command.authorizedFor.allowed(member);
+
+}
 
 export default {
     name: Events.InteractionCreate,
@@ -17,18 +36,10 @@ export default {
             return;
         }
 
-        let member = interaction.member;
-        if (!(member instanceof GuildMember)) {
-            member = await interaction.guild.members.fetch(member.user.id);
-        }
-        if (!member) {
-            return; // Just ignore that, shouldn't be possible anyway
-        }
-
-        if (!command.authorizedFor.allowed(member)) {
+        if (!await isAuthorized(interaction, command)) {
             await interaction.reply({
                 ephemeral: true,
-                content: "☹ sorry, I can't let you do that..."
+                content: '👮 No can do. Sorry not sorry!'
             });
             return;
         }
