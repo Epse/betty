@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "debug": "npx ts-node src/server.ts",
+    "debug": "npx ts-node src/server.ts betty_config=../../config.json",
     "types": "npx tsc --noEmit",
     "commands": "npx ts-node src/deploy-commands.ts",
     "lint": "eslint ."
