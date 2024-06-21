@@ -59,7 +59,6 @@ you will need to run the `deploy-commands.ts` script.
 
 You can use the compiled `.js` version in the Docker container for that,
 or even a local checkout of the same version of code.
-The guild id is the only important field to match here.
 
 We provide a `docker-compose.yml` file that can be used to quickly spin up Betty,
 provided you have a `config.json` and `.env` file ready.
