@@ -7,7 +7,6 @@ import commands from "./commands/commands";
 
 const token = process.env.DISCORDJS_BOT_TOKEN;
 const clientId = process.env.DISCORD_APP_ID;
-const guildId = process.env.GUILD_ID;
 
 const jsonCommands = commands.map(x => x.data.toJSON());
 
@@ -21,7 +20,7 @@ const rest = new REST().setToken(token);
 
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(
-            Routes.applicationGuildCommands(clientId, guildId),
+            Routes.applicationCommands(clientId),
             { body: jsonCommands },
         );
 
