@@ -1,0 +1,21 @@
+name: Push to GitLab
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'main'
+        fetch-depth: 0
+        fetch-tags: 1
+    - name: Push to GitLab
+      run: |
+        git checkout main
+        git push --set-upstream https://Epse:${{ secrets.GITLAB_PA }}@gitlab.com/belux-vacc/belux-discord-bot.git main
