@@ -16,7 +16,9 @@ const subcommands = [
 ];
 let data = new SlashCommandBuilder()
     .setName('event')
-    .setDescription('Tools for Events Department');
+    .setDescription('Tools for Events Department')
+    .setDMPermission(false)
+;
 
 subcommands.forEach(sub => data.addSubcommand(
     command => sub.make(command)));

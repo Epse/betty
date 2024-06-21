@@ -14,6 +14,7 @@ import {BoardAuthorization} from "../../authorization/authorize";
 const cmd = new SlashCommandBuilder()
     .setName('loa')
     .setDescription('Announce a new LOA')
+    .setDMPermission(false)
     .addStringOption(option => {
         option.setName('fir')
             .setDescription('The FIR the LOA is with')
