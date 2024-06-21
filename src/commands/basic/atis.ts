@@ -1,10 +1,11 @@
 import {Command} from "../../types/command";
 import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import {PublicAuthorization} from "../../authorization/authorize";
+import config from "../../util/config";
 
 function buildEmbed(atis: any): EmbedBuilder {
     return new EmbedBuilder()
-        .setColor(0x289fb8)
+        .setColor(config.color)
         .setTitle(`${atis['callsign']} is online!`)
         .setDescription(atis['text_atis'].join('\n'))
         .addFields(
@@ -65,7 +66,7 @@ async function replyMETAR(interaction: ChatInputCommandInteraction): Promise<boo
     await interaction.reply({
         embeds: [
             new EmbedBuilder()
-                .setColor(0x289fb8)
+                .setColor(config.color)
                 .setTitle(`No ATIS for ${icao}`)
                 .setDescription(`
 *But here is the latest METAR*

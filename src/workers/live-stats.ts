@@ -2,7 +2,6 @@ import {Client} from "../types/client";
 import {APIEmbedField, BaseGuildTextChannel, EmbedBuilder} from "discord.js";
 import {makeTimestamp, TimestampFormat} from "../util/timestamp";
 import config from "../util/config";
-import atis from "../commands/basic/atis";
 
 function aggregateAirport(icao: string, data: any): APIEmbedField[] {
     const flightPlans = data['pilots'].filter(x => x['flight_plan'] != null).map(x => x['flight_plan']);
@@ -90,19 +89,19 @@ export async function liveStats(client: Client): Promise<void> {
     const controllerFields = getControllerFields(datafile);
 
     const airportEmbed = new EmbedBuilder()
-        .setColor(0x289fb8)
+        .setColor(config.color)
         .setTimestamp()
         .setTitle(`${config.activity.title} ${relatime}`)
         .addFields(...airportFields);
 
     const atcEmbed = new EmbedBuilder()
-        .setColor(0x289fb8)
+        .setColor(config.color)
         .setTimestamp()
         .setTitle('ATC')
         .addFields(...getControllerFields(datafile));
 
     const atisEmbed = new EmbedBuilder()
-        .setColor(0x289fb8)
+        .setColor(config.color)
         .setTimestamp()
         .setTitle('ATIS')
         .addFields(...atisFields);
