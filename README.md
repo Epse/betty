@@ -6,7 +6,34 @@ Betty is vaguely based on Elizabeth and replicates functionality of Babs,
 two previous bots.
 Elizabeth was built by Jeroen, Babs by Stef (not the author of this bot).
 
-## Configuration
+## What does Betty do?
+
+Betty makes **gorgeous announcements**,
+whether it's publishing your local events or informing ATC of new LoA's,
+Betty keeps everyone on the same page.
+
+Betty **lets you talk**, automatically creating and deleting voice channels as needed,
+no longer is unrelated ATC talking over each other!
+
+Do you have people asking for backup in a channel? Betty will **clean your messes**,
+removing old messages as needed.
+
+With live updating statistics and an overview of online stations,
+Betty **keeps everyone on the same page**.
+Pilots and controllers alike can now quickly check if there's traffic or ATC,
+without opening yet another app.
+
+Have trouble scheduling ATC for your events?
+Betty **does scheduling bookkeeping**,
+automatically creating Threads for booking,
+posting rosters and switching to a debrief channel when the event is over.
+
+And of course, Betty is **flexible**.
+You can configure, tweak, or disable any of her features as you need them.
+Let her help you today!
+
+## How to use Betty?
+### Configuration
 
 Most configuration is done via a config.json file.
 You will find an example in this repo, as well as stricter typings in `config.ts`.
@@ -14,7 +41,7 @@ You will find an example in this repo, as well as stricter typings in `config.ts
 A very limited subset of sensitive configuration options are set via environment variable or `.env` file.
 You will find these documented in `.env.example`.
 
-## Deployment
+### Deployment
 
 Betty is available as a Docker image under `stefpletinck/betty`.
 There are immutable version tags that follow the Releases on GitHub,
@@ -28,7 +55,7 @@ You can use the compiled `.js` version in the Docker container for that,
 or even a local checkout of the same version of code.
 The guild id is the only important field to match here.
 
-## Licensing
+### Licensing
 
 See the LICENSE file for more info.
 
