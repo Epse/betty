@@ -1,4 +1,5 @@
 import loas from '../../resources/loa';
+import config from "../../util/config";
 
 import {
     BaseGuildTextChannel,
@@ -41,7 +42,7 @@ const execute = async (interaction: ChatInputCommandInteraction) => {
     const channel = interaction.options.getChannel('channel');
     const text = interaction.options.getString('text');
 
-    let infoMessage = global.config.loa.mention_roles.map(x => `<@&${x}>`).join(' ');
+    let infoMessage = config.loa.mention_roles.map(x => `<@&${x}>`).join(' ');
     infoMessage += "Please check the following updated LoA's on our website:\n";
     infoMessage += '------------------------------------\n';
     infoMessage += `**${loa}**\n`;

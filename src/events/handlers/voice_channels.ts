@@ -1,12 +1,12 @@
 import {EventHandler} from "../events";
 import {Events, VoiceState} from "discord.js";
-import {Client} from "../../types/client";
+import config from '../../util/config';
 
 async function leftChannel(oldState: VoiceState): Promise<void> {
     if (oldState.channel.members.size > 0)
         return; // Leave it
 
-    if (Object.keys(global.config.voice.autogen_channels)
+    if (Object.keys(config.voice.autogen_channels)
         .findIndex(x => x == oldState.channel.name) === -1)
         return; // Not our channel
 
@@ -14,7 +14,7 @@ async function leftChannel(oldState: VoiceState): Promise<void> {
 }
 
 async function joinedChannel(newState: VoiceState): Promise<void> {
-    const channelName = Object.entries(global.config.voice.autogen_channels)
+    const channelName = Object.entries(config.voice.autogen_channels)
         .find(([key, val]) => val == newState.channelId );
     if (channelName === undefined)
         return; // None of our business then
