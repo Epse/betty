@@ -1,3 +1,5 @@
+import {HexColorString} from "discord.js";
+
 export interface Config {
     /**
      * Name of this bot.
@@ -5,6 +7,7 @@ export interface Config {
      * but the display name is set in the Discord developer portal.
      */
     name: string,
+    color: HexColorString,
     voice: {
         /*
         Map of channel-name for automatically generated voice channels.

@@ -1,5 +1,6 @@
 {
   "name": "Nomi",
+  "color": "#456990",
   "voice": {
     "autogen_channels": {
       "test": "1253354012888141824"

@@ -7,6 +7,7 @@ import {
     SlashCommandSubcommandBuilder
 } from "discord.js";
 import {makeTimestamp} from "../../util/timestamp";
+import config from "../../util/config";
 
 async function getStatsimLink(vatsimId: string): Promise<string> {
     const response = await fetch(`https://statsim.net/events/eventidbyvatsimid/?vatsimid=${vatsimId}`);
@@ -54,7 +55,7 @@ export default {
 
         const embed = new EmbedBuilder()
             .setTitle(`**${event['name']}**`)
-            .setColor(0x289fb8)
+            .setColor(config.color)
             .setImage(event['banner'])
             .setDescription(event['description'])
             .setURL(event['link'])

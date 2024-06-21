@@ -30,7 +30,7 @@ export default {
         const startMessage = await channel.send({
             embeds: [new EmbedBuilder()
                 .setTitle(title)
-                .setColor(0x289fb8)]
+                .setColor(config.color)]
         });
 
         const thread = await startMessage.startThread({
@@ -42,7 +42,7 @@ export default {
                 new EmbedBuilder()
                     .setTitle('**Register now!**')
                     .setDescription('Use this thread to post your availability. No chatting! 👀')
-                    .setColor(0x289fb8)
+                    .setColor(config.color)
             ]
         });
         if (interaction.member instanceof GuildMember) {
