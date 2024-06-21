@@ -1,14 +1,16 @@
-import {REST, Routes} from "discord.js";
+import {REST, RESTPostAPIApplicationCommandsJSONBody, Routes} from "discord.js";
 
 require('dotenv').config();
 
 import commands from "./commands/commands";
+import {contextMenuHandlers} from "./context_menu/context_menu";
 
 
 const token = process.env.DISCORDJS_BOT_TOKEN;
 const clientId = process.env.DISCORD_APP_ID;
 
-const jsonCommands = commands.map(x => x.data.toJSON());
+let jsonCommands : RESTPostAPIApplicationCommandsJSONBody[] = commands.map(x => x.data.toJSON());
+jsonCommands = jsonCommands.concat(contextMenuHandlers.map(x => x.data.toJSON()));
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(token);
