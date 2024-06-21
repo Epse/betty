@@ -16,5 +16,11 @@ export interface Config {
     },
     loa: {
         mention_roles: string[]
+    },
+    activity: {
+        channel_id: string,
+        title: string,
+        airports: string[],
+        additional_prefixes: string[]
     }
 }

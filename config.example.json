@@ -22,5 +22,16 @@
     "mention_roles": [
       "12323"
     ]
+  },
+  "activity": {
+    "channel_id": "123",
+    "title": "Belux VATSIM",
+    "airports": [
+      "EBBR",
+      "ELLX"
+    ],
+    "additional_prefixes": [
+      "EBBU"
+    ]
   }
 }
