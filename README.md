@@ -36,16 +36,22 @@ Let her help you today!
 ### Configuration
 
 Most configuration is done via a config.json file.
-You will find an example in this repo, as well as stricter typings in `config.ts`.
+You will find an example in this repo, as well as stricter typings and descriptions in `config.ts`.
+If you use the Docker image, you will have to mount this,
+or make your own, derived, image that includes it.
+Our provided `docker-compose.yml` includes some example mounting configuration.
 
 A very limited subset of sensitive configuration options are set via environment variable or `.env` file.
 You will find these documented in `.env.example`.
+These env files can be mounted in the container and read by Betty herself,
+or read by Docker and kept safely outside the container.
 
 ### Deployment
 
 Betty is available as a Docker image under `stefpletinck/betty`.
 There are immutable version tags that follow the Releases on GitHub,
 as well as a `latest` tag.
+You do not need any public IP or callback URL.
 
 One thing to keep in mind is that Betty does not automatically manage command registration.
 If you update Betty and the update adds or changes commands,
@@ -54,6 +60,9 @@ you will need to run the `deploy-commands.ts` script.
 You can use the compiled `.js` version in the Docker container for that,
 or even a local checkout of the same version of code.
 The guild id is the only important field to match here.
+
+We provide a `docker-compose.yml` file that can be used to quickly spin up Betty,
+provided you have a `config.json` and `.env` file ready.
 
 ### Licensing
 
