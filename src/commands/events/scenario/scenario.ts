@@ -22,6 +22,7 @@ import {
 } from "discord.js";
 import {interactionIdSuffix} from "../../../util/interaction";
 import {getVfrIntensity} from "./vfr_intensity";
+import {getRunwayConfig} from "./runway_config";
 
 // TODO: handle timeouts
 const supported_icao = ['EBBR', 'EBAW', 'EBOS', 'EBCI', 'EBLG', 'ELLX'];
@@ -63,53 +64,32 @@ export default {
         )
     ,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
-
-        const interactionId = 'runway_config-' + interactionIdSuffix(interaction);
-        const row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
-            .addComponents(new StringSelectMenuBuilder()
-                .setCustomId(interactionId)
-                .setPlaceholder('Please choose one')
-                .addOptions(
-                    new StringSelectMenuOptionBuilder()
-                        .setLabel('Dep: 25R Arr: 25L')
-                        .setValue('d:25r_a:25l'),
-                    new StringSelectMenuOptionBuilder()
-                        .setLabel('Dep: 25R Arr: 19')
-                        .setValue('d:25r_a:19'),
-                    new StringSelectMenuOptionBuilder()
-                        .setLabel('Dep: 07L Arr: 07R')
-                        .setValue('d:07l_a:07r'),
-                ));
-
-        const m = await interaction.reply({
-            content: 'Choose your runway configuration',
-            components: [row]
+        await interaction.reply({
+            ephemeral: true,
+            content: "Okay, I have some questions for you!"
         });
 
-        const runway = await m.awaitMessageComponent({
-            filter: x => x.customId === interactionId,
-            time: 60_000
-        }) as StringSelectMenuInteraction;
-        await runway.reply({
+        const runwayConfig = await getRunwayConfig(interaction.options.getString('airport'), interaction);
+        await interaction.followUp({
             ephemeral: true,
             content: `
 We got:
-- Runway config: ${runway.values[0]}
 - Airport: ${interaction.options.getString('airport')}
+- Runway config: ${runwayConfig}
 - Intensity: ${interaction.options.getString('intensity')}
 - Pseudo-pilot: ${interaction.options.getString('pseudo_pilot')}
             `
         });
 
         if (interaction.options.getString('intensity') === 'VFR') {
-            const vfrIntensity = await getVfrIntensity(runway);
-            await runway.followUp({
+            const vfrIntensity = await getVfrIntensity(interaction);
+            await interaction.followUp({
                 ephemeral: true,
                 content: `We also got VFR departures: ${vfrIntensity.departures} and arrivals: ${vfrIntensity.arrivals}`
             });
         }
 
-        await runway.followUp({
+        await interaction.followUp({
             ephemeral: true,
             content: "👷‍♀️ We're still building this! 🚧"
         });

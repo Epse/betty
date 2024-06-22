@@ -5,8 +5,9 @@ import {
     MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder
 } from "discord.js";
 import {interactionIdSuffix} from "../../../util/interaction";
+import {ReplyableInteraction} from "../../../types/interaction";
 
-export async function getVfrIntensity(interaction: MessageComponentInteraction | ChatInputCommandInteraction):
+export async function getVfrIntensity(interaction: ReplyableInteraction):
     Promise<{ departures: number; arrivals: number }> {
     const interactionId = 'vfr_intensity-' + interactionIdSuffix(interaction);
 
