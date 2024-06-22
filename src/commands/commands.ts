@@ -4,7 +4,7 @@ import {Command} from "../types/command";
 import atis from "./basic/atis";
 import event from "./events/event";
 import license from "./basic/license";
-import scenario from "./scenario";
+import scenario from "./events/scenario/scenario";
 
 export default [
     help,
