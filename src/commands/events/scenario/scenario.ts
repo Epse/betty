@@ -16,11 +16,9 @@ import {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
 } from "discord.js";
-import {getVfrIntensity} from "./vfr_intensity";
 import {getRunwayConfig} from "./runway_config";
 import {airportOption, pseudoPilotOption} from "./common_options";
 
-// TODO: handle timeouts
 
 // TODO is authz necessary?
 export default {
@@ -114,10 +112,16 @@ export default {
         )
     ,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+        // We will be assuming the Discord input validation actually works...
+        const airport = interaction.options.getString('airport');
         await interaction.reply({
             ephemeral: true,
             content: "👷‍♀️ We're still building this! 🚧"
         });
+
+        // TODO: handle timeouts
+        const runwayConfig = await getRunwayConfig(airport, interaction);
+
         return;
     }
 } satisfies Command;
