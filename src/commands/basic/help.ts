@@ -21,11 +21,12 @@ Right now, you can use:
 - \`/${config.name.toLowerCase()}\` to view this help
 - \`/atis\` to view an ATIS
 - \`/event\` to publish an event
+- \`/license\` for info on, well, licensing
 
 Type a command to view in-line documentation on its arguments and usage.
 
-This bot is open source and licensed under GPL3.0.
-For more info, see [GitHub](https://github.com/Epse/betty) .
+\`/atis\` is available in DMs.
+You may not have permission to run some or most commands.
 `
         });
     },
