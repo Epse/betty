@@ -4,8 +4,8 @@ import {
     MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuInteraction,
     StringSelectMenuOptionBuilder
 } from "discord.js";
-import {ReplyableInteraction} from "../../../types/interaction";
-import {interactionIdSuffix} from "../../../util/interaction";
+import {ReplyableInteraction} from "../../types/interaction";
+import {interactionIdSuffix} from "../../util/interaction";
 
 const airportRunwaySelections = {
     EBBR: [

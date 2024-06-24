@@ -10,8 +10,8 @@ Data to collect for scenario generator:
 This gets fed into the script.
  */
 
-import {Command} from "../../../types/command";
-import {PublicAuthorization} from "../../../authorization/authorize";
+import {Command} from "../../types/command";
+import {PublicAuthorization} from "../../authorization/authorize";
 import {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
