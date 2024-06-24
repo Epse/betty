@@ -30,13 +30,18 @@ export type AtcGroup =
     | "atcLGApp"
     | "atcLow"
     | "atcLXApp"
-;
+    ;
 
 
 export interface AirportData {
     atcGroup: AtcGroup,
-    approaches: {[key: string]: string[]},
-    intensity: {[key in "LOW" | "MEDIUM" | "HIGH"]: TrafficCounts},
+    configurations: {
+        [key: string]: {
+            approaches: string[],
+            routeFiles: string[],
+        }
+    },
+    intensity: { [key in "LOW" | "MEDIUM" | "HIGH"]: TrafficCounts },
     elevation: string,
     departureAltitude: string,
 }

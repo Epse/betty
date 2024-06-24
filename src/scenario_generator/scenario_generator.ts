@@ -4,10 +4,8 @@ import {finished} from 'stream/promises';
 import {Readable} from 'stream';
 import {ReadableStream} from 'stream/web';
 import StreamZip from "node-stream-zip";
-import {ScenarioAirport, ScenarioIntensity, TrafficCounts} from "./types";
-import intensities from "./data/airports";
-import elevation from "./data/elevation";
-import controllers_files from "./data/controllers_files";
+import {AirportData, ScenarioAirport, ScenarioIntensity, TrafficCounts} from "./types";
+import airports from "./data/airports";
 
 export class ScenarioGenerator {
     private readonly dataDirectory: string;
@@ -21,13 +19,21 @@ export class ScenarioGenerator {
         vfrArrivals: 0,
         faults: 0
     };
+    private readonly configuration: string;
+    private readonly airportData: AirportData;
 
     private buffer: string;
 
-    public constructor(dataDirectory: string, airport: ScenarioAirport) {
+    public constructor(dataDirectory: string, airport: ScenarioAirport, configuration: string) {
+        this.airport = airport;
+        this.airportData = airports[this.airport];
         this.dataDirectory = dataDirectory;
         this.besasDirectory = path.join(this.dataDirectory, 'used_files');
-        this.airport = airport;
+        if (Object.keys(this.airportData.configurations)
+            .findIndex(x => x === configuration) === -1) {
+            throw new Error("Bad configuration");
+        }
+        this.configuration = configuration;
     }
 
     /**
@@ -70,28 +76,42 @@ export class ScenarioGenerator {
             return this; // They have all at zero, or custom
         }
 
-        this.desired = intensities[this.airport][intensity];
+        this.desired = airports[this.airport].intensity[intensity];
         return this;
     }
 
     private async appendControllers(): Promise<void> {
-        const fixName = controllers_files[this.airport];
+        const fixName = this.airportData.atcGroup;
         const file = path.join(this.besasDirectory, 'fix', `${fixName}.txt`);
-        this.buffer += (await fs.promises.readFile(file)).toString();
+        await this.appendFile(file);
     }
 
     private async appendApproaches(): Promise<void> {
-
+        Object.keys(
+            this.airportData
+                .configurations[this.configuration]
+        ).forEach(x => this.append(x));
     }
 
     private async appendRoutes(): Promise<void> {
+        for (const routeFile of this.airportData.configurations[this.configuration].routeFiles) {
+            await this.appendFile(path.join(this.besasDirectory, 'fix',  routeFile));
+        }
+    }
 
+    private append(line: string): void {
+        this.buffer += line;
+        this.buffer += "\n";
+    }
+
+    private async appendFile(fileName: string): Promise<void> {
+        this.append((await fs.promises.readFile(fileName)).toString());
     }
 
     public async build(): Promise<void> {
         await this.ensureBesasFiles();
 
-        this.buffer += `AIRPORT_ALT:${elevation[this.airport]}`;
+        this.append(`AIRPORT_ALT:${this.airportData.elevation}`);
         await this.appendControllers();
         await this.appendApproaches();
         await this.appendRoutes();
