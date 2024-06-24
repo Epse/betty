@@ -4,12 +4,15 @@ import {finished} from 'stream/promises';
 import {Readable} from 'stream';
 import {ReadableStream} from 'stream/web';
 import StreamZip from "node-stream-zip";
-import {ScenarioIntensity, TrafficCounts} from "./types";
+import {ScenarioAirport, ScenarioIntensity, TrafficCounts} from "./types";
+import intensities from "./data/airports";
+import elevation from "./data/elevation";
+import controllers_files from "./data/controllers_files";
 
 export class ScenarioGenerator {
     private readonly dataDirectory: string;
     private readonly besasDirectory: string;
-    private readonly airport: string;
+    private readonly airport: ScenarioAirport;
     private desired: TrafficCounts = {
         starts: 0,
         ifrDepartures: 0,
@@ -19,7 +22,9 @@ export class ScenarioGenerator {
         faults: 0
     };
 
-    public constructor(dataDirectory: string, airport: string) {
+    private buffer: string;
+
+    public constructor(dataDirectory: string, airport: ScenarioAirport) {
         this.dataDirectory = dataDirectory;
         this.besasDirectory = path.join(this.dataDirectory, 'used_files');
         this.airport = airport;
@@ -65,10 +70,33 @@ export class ScenarioGenerator {
             return this; // They have all at zero, or custom
         }
 
+        this.desired = intensities[this.airport][intensity];
+        return this;
+    }
+
+    private async appendControllers(): Promise<void> {
+        const fixName = controllers_files[this.airport];
+        const file = path.join(this.besasDirectory, 'fix', `${fixName}.txt`);
+        this.buffer += (await fs.promises.readFile(file)).toString();
+    }
+
+    private async appendApproaches(): Promise<void> {
+
+    }
+
+    private async appendRoutes(): Promise<void> {
+
     }
 
     public async build(): Promise<void> {
         await this.ensureBesasFiles();
+
+        this.buffer += `AIRPORT_ALT:${elevation[this.airport]}`;
+        await this.appendControllers();
+        await this.appendApproaches();
+        await this.appendRoutes();
+
+        // Now make flights :D
     }
 
 }
