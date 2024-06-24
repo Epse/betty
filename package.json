@@ -6,7 +6,7 @@
   "scripts": {
     "debug": "npx ts-node src/server.ts betty_config=../../config.json",
     "types": "npx tsc --noEmit",
-    "commands": "npx ts-node src/deploy-commands.ts",
+    "commands": "npx ts-node src/deploy-commands.ts betty_config=../../config.json",
     "lint": "eslint ."
   },
   "keywords": [],
