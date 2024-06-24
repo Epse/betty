@@ -18,6 +18,10 @@ import {
 } from "discord.js";
 import {getRunwayConfig} from "./runway_config";
 import {airportOption, pseudoPilotOption} from "./common_options";
+import {ScenarioGenerator} from "../../scenario_generator/scenario_generator";
+import fs from "fs";
+import path from "path";
+import {tmpdir} from "os";
 
 
 // TODO is authz necessary?
@@ -121,6 +125,10 @@ export default {
 
         // TODO: handle timeouts
         const runwayConfig = await getRunwayConfig(airport, interaction);
+
+        const scenarioGeneratorDir = await fs.promises.mkdtemp(path.join(tmpdir(), "scenario-generator-"));
+        await new ScenarioGenerator(scenarioGeneratorDir, airport)
+            .build();
 
         return;
     }
