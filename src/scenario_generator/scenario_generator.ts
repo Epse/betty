@@ -12,7 +12,7 @@ export class ScenarioGenerator {
     private readonly besasDirectory: string;
     private readonly airport: ScenarioAirport;
     private desired: TrafficCounts = {
-        starts: 0,
+        initial: 0,
         ifrDepartures: 0,
         ifrArrivals: 0,
         vfrDepartures: 0,
@@ -116,7 +116,7 @@ export class ScenarioGenerator {
         await this.appendApproaches();
         await this.appendRoutes();
 
-        // Now make flights :D
+        // Now select flights :D
     }
 
 }

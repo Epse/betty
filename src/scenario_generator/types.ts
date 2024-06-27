@@ -1,5 +1,5 @@
 export interface TrafficCounts {
-    starts: number,
+    initial: number,
     ifrDepartures: number,
     ifrArrivals: number,
     vfrDepartures: number,
@@ -32,14 +32,25 @@ export type AtcGroup =
     | "atcLXApp"
     ;
 
+export interface RouteDefinition {
+    spawn: string,
+    route: string | null, // Without $ROUTE, without callsign or options
+    reqAlt: string, // In the format fix:alt
+}
+
+export interface Configuration {
+    approaches: string[],
+    routeFiles: string[],
+    routes: {
+        vfr: RouteDefinition[],
+        ifr: RouteDefinition[],
+    }
+}
 
 export interface AirportData {
     atcGroup: AtcGroup,
     configurations: {
-        [key: string]: {
-            approaches: string[],
-            routeFiles: string[],
-        }
+        [key: string]: Configuration
     },
     intensity: { [key in "LOW" | "MEDIUM" | "HIGH"]: TrafficCounts },
     elevation: string,
