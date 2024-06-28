@@ -137,19 +137,19 @@ export default {
 
         if (intensity === "VFR") {
             generator.setVfr(
-                interaction.options.getNumber('vfr_dep'),
-                interaction.options.getNumber("vfr_arr")
+                interaction.options.getInteger('vfr_dep'),
+                interaction.options.getInteger("vfr_arr")
             );
         }
 
         if (intensity == "CUSTOM") {
             generator.setCounts({
-                initial: interaction.options.getNumber('start_spawns'),
-                ifrDepartures: interaction.options.getNumber('ifr_dep'),
-                vfrDepartures: interaction.options.getNumber('vfr_dep'),
-                ifrArrivals: interaction.options.getNumber('ifr_arr'),
-                vfrArrivals: interaction.options.getNumber('vfr_arr'),
-                faults: interaction.options.getNumber('faults'),
+                initial: interaction.options.getInteger('start_spawns'),
+                ifrDepartures: interaction.options.getInteger('ifr_dep'),
+                vfrDepartures: interaction.options.getInteger('vfr_dep'),
+                ifrArrivals: interaction.options.getInteger('ifr_arr'),
+                vfrArrivals: interaction.options.getInteger('vfr_arr'),
+                faults: interaction.options.getInteger('faults'),
             });
         }
 
