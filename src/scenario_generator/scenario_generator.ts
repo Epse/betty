@@ -6,11 +6,10 @@ import {ReadableStream} from 'stream/web';
 import StreamZip from "node-stream-zip";
 import {AirportData, ScenarioAirport, ScenarioIntensity, TrafficCounts} from "./types";
 import airports from "./data/airports";
+import {FlightSelector} from "./flight_selector";
 
 export class ScenarioGenerator {
-    private readonly dataDirectory: string;
     private readonly besasDirectory: string;
-    private readonly airport: ScenarioAirport;
     private desired: TrafficCounts = {
         initial: 0,
         ifrDepartures: 0,
@@ -19,21 +18,22 @@ export class ScenarioGenerator {
         vfrArrivals: 0,
         faults: 0
     };
-    private readonly configuration: string;
     private readonly airportData: AirportData;
 
-    private buffer: string;
+    private buffer: string = "";
 
-    public constructor(dataDirectory: string, airport: ScenarioAirport, configuration: string) {
-        this.airport = airport;
+    public constructor(
+        public readonly dataDirectory: string,
+        public readonly airport: ScenarioAirport,
+        private readonly configuration: string,
+        private readonly initialPseudoPilot: string,
+    ) {
         this.airportData = airports[this.airport];
-        this.dataDirectory = dataDirectory;
         this.besasDirectory = path.join(this.dataDirectory, 'used_files');
         if (Object.keys(this.airportData.configurations)
             .findIndex(x => x === configuration) === -1) {
             throw new Error("Bad configuration");
         }
-        this.configuration = configuration;
     }
 
     /**
@@ -44,6 +44,7 @@ export class ScenarioGenerator {
         try {
             // TODO check outdated files
             await fs.promises.access(this.besasDirectory, fs.constants.R_OK);
+            console.debug('No need to fetch besas files');
             return; // If succeeds, they exist
         } catch (_) {
         }
@@ -55,9 +56,9 @@ export class ScenarioGenerator {
         await finished(Readable.fromWeb(response.body as ReadableStream<any>).pipe(fileStream))
 
         let zip = new StreamZip.async({file: zipPath});
-        await fs.promises.mkdir(this.besasDirectory);
-        await zip.extract(null, this.besasDirectory);
+        await zip.extract(null, this.dataDirectory);
         await zip.close();
+        console.debug('Extracted besas files');
     }
 
     public setCounts(counts: TrafficCounts): this {
@@ -87,15 +88,15 @@ export class ScenarioGenerator {
     }
 
     private async appendApproaches(): Promise<void> {
-        Object.keys(
-            this.airportData
-                .configurations[this.configuration]
-        ).forEach(x => this.append(x));
+        this.airportData
+            .configurations[this.configuration]
+            .approaches
+            .forEach(x => this.append(x));
     }
 
     private async appendRoutes(): Promise<void> {
         for (const routeFile of this.airportData.configurations[this.configuration].routeFiles) {
-            await this.appendFile(path.join(this.besasDirectory, 'fix',  routeFile));
+            await this.appendFile(path.join(this.besasDirectory, 'fix', routeFile));
         }
     }
 
@@ -108,15 +109,29 @@ export class ScenarioGenerator {
         this.append((await fs.promises.readFile(fileName)).toString());
     }
 
-    public async build(): Promise<void> {
+    public async build(): Promise<string> {
         await this.ensureBesasFiles();
 
         this.append(`AIRPORT_ALT:${this.airportData.elevation}`);
         await this.appendControllers();
         await this.appendApproaches();
         await this.appendRoutes();
+        this.append("\n");
+
+        const flightPlans = (await fs.promises.readFile(
+            path.join(this.besasDirectory, 'flights', 'flights.txt')
+        ))
+            .toString()
+            .split('\n')
+            .filter(x => x.length > 2); // 2 characters could also just be \r\n
 
         // Now select flights :D
+        const selector =
+            new FlightSelector(this.initialPseudoPilot, this.airport, this.configuration, this.desired, flightPlans);
+
+        await selector.setup();
+        this.append(selector.select().toString());
+        return this.buffer;
     }
 
 }

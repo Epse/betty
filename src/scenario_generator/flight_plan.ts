@@ -14,43 +14,60 @@ A scenario entry looks like this:
 - initialpseudopilot line (for some other module)
  */
 export class FlightPlan {
-    public readonly callsign: string;
-    public readonly rules: "I" | "V";
-    public readonly aircraft: string; // includes weight category
-    public readonly departure: string;
-    public readonly departureTime: string;
-    public readonly route: string;
-    public readonly tas: string;
-    public readonly rfl: string;
-    public readonly arrival: string;
     public readonly squawk: string;
-    public readonly flightTime: string;
-    public readonly alternate: string;
 
-    public constructor(entry: string) {
+    public constructor(
+        public readonly callsign: string,
+        public readonly rules: "I" | "V",
+        public readonly aircraft: string, // includes weight category
+        public readonly departure: string,
+        public readonly departureTime: string,
+        public readonly route: string,
+        public readonly tas: string,
+        public readonly rfl: string,
+        public readonly arrival: string,
+        public readonly flightTime: string,
+        public readonly alternate: string,
+    ) {
+        this.squawk = this.generateSquawk();
+    }
+
+    public static fromEntry(entry: string): FlightPlan {
         /*
         Example entry so you can follow along:
         RMA0013 130002 FF EBBRRAMS 130002 EUCHZMFP (FPL-RYR148U-IS-B738/M-SDE3FGIJ1LRWYZ/SB1-LRIA0735-N0317F100 ARPIG P133 TOMUC/N0440F340 DCT KARIL DCT RIGSA DCT PITOK DCT SLC/N0451F380 DCT LALES DCT BNO DCT OKG L984 LONLI DCT MARZA DCT ESAMA/N0381F260 T880 ADMUM/N0370F240 T880 BATTY-EBCI0230 LFQQ-PBN/A1B1B5D1D3L1O1S2 COM/TCAS DOF/240613 REG/EIDHG EET/LHCC0034 LZBB0049 LKAA0105 EDUU0136 EDGG0206 EBUR0212 EBBU0223 CODE/4CA263 RVR/200 IFP/MODESASP OPR/RYR ORGN/DUBOEFR PER/C TALT/LROP RMK/CONTACT +353 1 9451990 TCAS)
          */
         const parts = entry.split('-');
-        this.callsign = parts[1];
-        this.rules = parts[2][0] === 'V' ? 'V' : 'I'; // Realistically the char should always be I or V, but types
-        this.aircraft = parts[3];
+        const callsign = parts[1];
+        const rules = parts[2][0] === 'V' ? 'V' : 'I'; // Realistically the char should always be I or V, but types
+        const aircraft = parts[3];
         // part 4 is the equipment, we don't need that right now
-        this.departure = parts[5].substring(0, 4);
-        this.departureTime = parts[5].substring(4);
-        this.route = parts[6];
+        const departure = parts[5].substring(0, 4);
+        const departureTime = parts[5].substring(4);
+        const route = parts[6];
 
         // This section usually looks like N0132F100, but could also be N0070VFR, or K0130VFR
-        const speedLevelSection = this.route.split(' ')[0];
-        this.parseSpeedAltitude(speedLevelSection);
+        const speedLevelSection = route.split(' ')[0];
+        const speedAlt = this.parseSpeedAltitude(speedLevelSection);
 
         // part 7 looks like EBBR0123 followed by a space-seperated list of alternates
-        this.arrival = parts[7].substring(0, 4);
-        this.alternate = parts[7].split(' ')[1]; // First alternate should be fine
-        this.flightTime = parts[7].substring(4, 8);
+        const arrival = parts[7].substring(0, 4);
+        const alternate = parts[7].split(' ')[1]; // First alternate should be fine
+        const flightTime = parts[7].substring(4, 8);
 
-        this.squawk = this.generateSquawk();
+        return new FlightPlan(
+            callsign,
+            rules,
+            aircraft,
+            departure,
+            departureTime,
+            route,
+            speedAlt.tas,
+            speedAlt.altitude,
+            arrival,
+            flightTime,
+            alternate
+        );
     }
 
     /*
@@ -69,7 +86,7 @@ export class FlightPlan {
         - M0123, aka 1230m of altitude
         - VFR
      */
-    private parseSpeedAltitude(input: string): { tas: string, altitude: string } {
+    private static parseSpeedAltitude(input: string): { tas: string, altitude: string } {
         let output = {tas: '', altitude: ''};
         switch (input[0]) {
             case 'N':
@@ -143,10 +160,10 @@ export class FlightPlan {
 :${this.departure}:${this.departureTime}:${this.departureTime}:${this.rfl}\
 :${this.arrival}:${this.flightTime.substring(0, 2)}:${this.flightTime.substring(2)}:\
 ${this.getFuelHours()}:${this.flightTime.substring(2)}:${this.alternate}:${this.getRemarks()}:\
-${includeRoute ? this.route: ''}`;
+${includeRoute ? this.route : ''}`;
     }
 
     public getSimDataLine(): string {
-        return `SIMDATA:${this.callsign}:*:*:${this.isLight()?'15':'20'}:1:0`;
+        return `SIMDATA:${this.callsign}:*:*:${this.isLight() ? '15' : '20'}:1:0`;
     }
 }

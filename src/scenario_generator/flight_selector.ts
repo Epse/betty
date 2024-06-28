@@ -3,6 +3,7 @@ import {FlightPlan} from "./flight_plan";
 import {ArrivalFlightPlan, DepartureFlightPlan, ScheduledFlightPlan} from "./scheduled_flight_plan";
 import airports from "./data/airports";
 import {GateAssigner} from "./gate_assigner";
+import {makeAVFR} from "./make_a_vfr";
 
 /**
  * Performs an in-place Fischer-Yates shuffle on the provided array,
@@ -22,7 +23,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export class FlightSelector {
     private readonly flightPlans: FlightPlan[];
-    private selected: ScheduledFlightPlan[];
+    private selected: ScheduledFlightPlan[] = [];
     public readonly duration = 60; // 60 minutes
     private readonly currentConfiguration: Configuration;
     private gates: GateAssigner;
@@ -32,9 +33,9 @@ export class FlightSelector {
                        public readonly configuration: string,
                        public readonly desired: TrafficCounts,
                        flightPlans: string[]) {
-        this.flightPlans = shuffleArray(flightPlans.map(x => new FlightPlan(x)));
-        this.currentConfiguration = airports[this.airport]?.configurations ? [this.configuration] ?? null;
-        if (this.currentConfiguration === null) {
+        this.flightPlans = shuffleArray(flightPlans.map(x => FlightPlan.fromEntry(x)));
+        this.currentConfiguration = airports[this.airport]?.configurations[this.configuration] ?? null;
+        if (this.currentConfiguration === null || this.currentConfiguration === undefined) {
             throw new Error("Bad configuration");
         }
 
@@ -60,6 +61,8 @@ export class FlightSelector {
 
     public generateFaults(): this {
         // TODO
+
+        return this;
     }
 
     public get(): ScheduledFlightPlan[] {
@@ -148,6 +151,10 @@ export class FlightSelector {
             .filter(x => x.rules === "V")
         ;
 
+        while (departures.length < this.desired.vfrDepartures) {
+            departures.push(makeAVFR(this.airport, true));
+        }
+
         for (let x = 0; x < this.desired.vfrDepartures; x++) {
             toBeAdded.push(
                 new DepartureFlightPlan(departures[x])
@@ -167,6 +174,10 @@ export class FlightSelector {
             .filter(x => x.arrival == this.airport)
             .filter(x => x.rules == "V")
         ;
+
+        while (arrivals.length < this.desired.vfrArrivals) {
+            arrivals.push(makeAVFR(this.airport, false));
+        }
 
         for (let x = 0; x < this.desired.vfrArrivals; x++) {
             const arrivalIndex = Math.round(Math.random() * (this.currentConfiguration.routes.vfr.length - 1));

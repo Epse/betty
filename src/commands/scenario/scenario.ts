@@ -13,6 +13,7 @@ This gets fed into the script.
 import {Command} from "../../types/command";
 import {PublicAuthorization} from "../../authorization/authorize";
 import {
+    AttachmentBuilder,
     ChatInputCommandInteraction,
     SlashCommandBuilder,
 } from "discord.js";
@@ -22,6 +23,7 @@ import {ScenarioGenerator} from "../../scenario_generator/scenario_generator";
 import fs from "fs";
 import path from "path";
 import {tmpdir} from "os";
+import {ScenarioAirport, ScenarioIntensity, TrafficCounts} from "../../scenario_generator/types";
 
 
 // TODO is authz necessary?
@@ -117,7 +119,10 @@ export default {
     ,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         // We will be assuming the Discord input validation actually works...
-        const airport = interaction.options.getString('airport');
+        const airport = interaction.options.getString('airport') as ScenarioAirport;
+        const pseudo = interaction.options.getString('pseudo_pilot');
+        const intensity = interaction.options.getSubcommand().toUpperCase() as ScenarioIntensity;
+
         await interaction.reply({
             ephemeral: true,
             content: "👷‍♀️ We're still building this! 🚧"
@@ -127,8 +132,37 @@ export default {
         const runwayConfig = await getRunwayConfig(airport, interaction);
 
         const scenarioGeneratorDir = await fs.promises.mkdtemp(path.join(tmpdir(), "scenario-generator-"));
-        await new ScenarioGenerator(scenarioGeneratorDir, airport)
-            .build();
+        const generator = new ScenarioGenerator(scenarioGeneratorDir, airport, runwayConfig, pseudo)
+            .setIntensity(intensity);
+
+        if (intensity === "VFR") {
+            generator.setVfr(
+                interaction.options.getNumber('vfr_dep'),
+                interaction.options.getNumber("vfr_arr")
+            );
+        }
+
+        if (intensity == "CUSTOM") {
+            generator.setCounts({
+                initial: interaction.options.getNumber('start_spawns'),
+                ifrDepartures: interaction.options.getNumber('ifr_dep'),
+                vfrDepartures: interaction.options.getNumber('vfr_dep'),
+                ifrArrivals: interaction.options.getNumber('ifr_arr'),
+                vfrArrivals: interaction.options.getNumber('vfr_arr'),
+                faults: interaction.options.getNumber('faults'),
+            });
+        }
+
+        const scenario = await generator.build();
+        await interaction.followUp({
+            ephemeral: true,
+            content: 'There you go, safe skies!',
+            files: [
+                new AttachmentBuilder(Buffer.from(scenario, 'utf8'))
+                    .setName('scenario.txt')
+                    .setDescription('Scenario file as you requested')
+            ]
+        });
 
         return;
     }

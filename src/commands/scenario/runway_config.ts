@@ -47,7 +47,10 @@ export async function getRunwayConfig(airport: string, interaction: ReplyableInt
         filter: x => x.customId === id,
         time: 60_000
     }) as StringSelectMenuInteraction;
-    await response.update({});
+    await response.reply({
+        ephemeral: true,
+        content: `Building for ${response.values[0]}`
+    });
 
     return response.values[0];
 }
