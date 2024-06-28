@@ -2,6 +2,7 @@ import {Configuration, ScenarioAirport, TrafficCounts} from "./types";
 import {FlightPlan} from "./flight_plan";
 import {ArrivalFlightPlan, DepartureFlightPlan, ScheduledFlightPlan} from "./scheduled_flight_plan";
 import airports from "./data/airports";
+import {GateAssigner} from "./gate_assigner";
 
 /**
  * Performs an in-place Fischer-Yates shuffle on the provided array,
@@ -24,6 +25,7 @@ export class FlightSelector {
     private selected: ScheduledFlightPlan[];
     public readonly duration = 60; // 60 minutes
     private readonly currentConfiguration: Configuration;
+    private gates: GateAssigner;
 
     public constructor(public readonly initialPseudoPilot: string,
                        public readonly airport: ScenarioAirport,
@@ -35,6 +37,13 @@ export class FlightSelector {
         if (this.currentConfiguration === null) {
             throw new Error("Bad configuration");
         }
+
+        this.gates = new GateAssigner();
+    }
+
+    public async setup(): Promise<this> {
+        await this.gates.getGates();
+        return this;
     }
 
     /**
@@ -43,7 +52,10 @@ export class FlightSelector {
     public select(): this {
         return this.selectInitial()
             .selectIfrDepartures()
-            .selectIfrArrivals();
+            .selectIfrArrivals()
+            .selectVfrDepartures()
+            .selectVfrArrivals()
+            .generateFaults();
     }
 
     public generateFaults(): this {
@@ -72,9 +84,8 @@ export class FlightSelector {
                 new DepartureFlightPlan(departures[x])
                     .setStart(0)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
-                    .setPosition(); // TODO pull from gate api, probably
-        )
-            ;
+                    .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
+            );
         }
 
         this.selected.push(...toBeAdded);
@@ -95,8 +106,8 @@ export class FlightSelector {
                 new DepartureFlightPlan(departures[x])
                     .setStart((x + 1) * interval)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
-                    .setPosition(); // TODO
-        )
+                    .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
+            );
         }
         this.selected.push(...toBeAdded);
         return this;
@@ -114,6 +125,52 @@ export class FlightSelector {
         for (let x = 0; x < this.desired.ifrArrivals; x++) {
             const arrivalIndex = Math.round(Math.random() * (this.currentConfiguration.routes.ifr.length - 1));
             const arrival = this.currentConfiguration.routes.ifr[arrivalIndex];
+
+            toBeAdded.push(
+                new ArrivalFlightPlan(arrivals[x])
+                    .setStart(x * interval)
+                    .setInitialPseudoPilot(this.initialPseudoPilot)
+                    .setRoute(arrival.route)
+                    .setRoute(arrival.reqAlt)
+                    .setPosition(arrival.spawn)
+            );
+        }
+
+        this.selected.push(...toBeAdded);
+        return this;
+    }
+
+    private selectVfrDepartures(): this {
+        const interval = Math.round(this.duration / this.desired.vfrDepartures);
+        let toBeAdded: ScheduledFlightPlan[] = [];
+        const departures = this.flightPlans
+            .filter(x => x.departure == this.airport)
+            .filter(x => x.rules === "V")
+        ;
+
+        for (let x = 0; x < this.desired.vfrDepartures; x++) {
+            toBeAdded.push(
+                new DepartureFlightPlan(departures[x])
+                    .setStart((x + 1) * interval)
+                    .setInitialPseudoPilot(this.initialPseudoPilot)
+                    .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
+            );
+        }
+        this.selected.push(...toBeAdded);
+        return this;
+    }
+
+    private selectVfrArrivals(): this {
+        const interval = Math.round(this.duration / this.desired.vfrArrivals);
+        let toBeAdded: ScheduledFlightPlan[] = [];
+        const arrivals = this.flightPlans
+            .filter(x => x.arrival == this.airport)
+            .filter(x => x.rules == "V")
+        ;
+
+        for (let x = 0; x < this.desired.vfrArrivals; x++) {
+            const arrivalIndex = Math.round(Math.random() * (this.currentConfiguration.routes.vfr.length - 1));
+            const arrival = this.currentConfiguration.routes.vfr[arrivalIndex];
 
             toBeAdded.push(
                 new ArrivalFlightPlan(arrivals[x])

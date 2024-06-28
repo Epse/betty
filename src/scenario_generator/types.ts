@@ -15,6 +15,13 @@ export type ScenarioIntensity =
     | "CUSTOM"
     ;
 
+export type WeightCategory =
+    | "L"
+    | "M"
+    | "H"
+    | "J"
+    ;
+
 export type ScenarioAirport =
     | 'EBBR'
     | 'EBAW'
@@ -58,6 +65,11 @@ export interface Configuration {
     }
 }
 
+export interface ApronMapping {
+    types: TrafficType[],
+    aprons: string[]
+};
+
 export interface AirportData {
     atcGroup: AtcGroup,
     configurations: {
@@ -69,7 +81,7 @@ export interface AirportData {
     Empty array always matches.
     Empty mapping ensures we always pick at random
      */
-    apronMapping: { types: TrafficType[], aprons: string[] }[],
+    apronMapping: ApronMapping[],
     intensity: { [key in "LOW" | "MEDIUM" | "HIGH"]: TrafficCounts },
     elevation: string,
     departureAltitude: string,

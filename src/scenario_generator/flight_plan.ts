@@ -1,4 +1,6 @@
 import assert from "node:assert";
+import {GateAssigner} from "./gate_assigner";
+import {WeightCategory} from "./types";
 
 /*
 Stores data about a flight plan and converts it into useful formats for ES.
@@ -130,6 +132,10 @@ export class FlightPlan {
 
     public isLight(): boolean {
         return this.aircraft.endsWith('/L');
+    }
+
+    public weightCategory(): WeightCategory {
+        return this.aircraft.at(this.aircraft.length - 1) as WeightCategory;
     }
 
     public getFlightPlanLine(includeRoute: boolean = true): string {
