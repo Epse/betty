@@ -31,7 +31,7 @@ export class FlightSelector {
                        public readonly desired: TrafficCounts,
                        flightPlans: string[]) {
         this.flightPlans = shuffleArray(flightPlans.map(x => new FlightPlan(x)));
-        this.currentConfiguration = airports[this.airport]?.configurations?[this.configuration] ?? null;
+        this.currentConfiguration = airports[this.airport]?.configurations ? [this.configuration] ?? null;
         if (this.currentConfiguration === null) {
             throw new Error("Bad configuration");
         }
@@ -115,12 +115,17 @@ export class FlightSelector {
             const arrivalIndex = Math.round(Math.random() * (this.currentConfiguration.routes.ifr.length - 1));
             const arrival = this.currentConfiguration.routes.ifr[arrivalIndex];
 
-            new ArrivalFlightPlan(arrivals[x])
-                .setStart(x * interval)
-                .setInitialPseudoPilot(this.initialPseudoPilot)
-                .setRoute(arrival.route)
-                .setRoute(arrival.reqAlt)
-                .setPosition(arrival.spawn);
+            toBeAdded.push(
+                new ArrivalFlightPlan(arrivals[x])
+                    .setStart(x * interval)
+                    .setInitialPseudoPilot(this.initialPseudoPilot)
+                    .setRoute(arrival.route)
+                    .setRoute(arrival.reqAlt)
+                    .setPosition(arrival.spawn)
+            );
         }
+
+        this.selected.push(...toBeAdded);
+        return this;
     }
 }
