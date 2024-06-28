@@ -1,5 +1,5 @@
-import {Client} from "../types/client";
-import {APIEmbedField, BaseGuildTextChannel, EmbedBuilder} from "discord.js";
+import "../types/client";
+import {APIEmbedField, BaseGuildTextChannel, Client, EmbedBuilder} from "discord.js";
 import {makeTimestamp, TimestampFormat} from "../util/timestamp";
 import config from "../util/config";
 

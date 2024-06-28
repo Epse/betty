@@ -1,8 +1,8 @@
-import {Client} from "./types/client";
+import "./types/client";
 
 require('dotenv')
     .config();
-import {Collection, GatewayIntentBits} from 'discord.js';
+import {Client, Collection, GatewayIntentBits} from 'discord.js';
 import commands from './commands/commands';
 import {events} from './events/events';
 import deleteMessages from './workers/delete-messages';

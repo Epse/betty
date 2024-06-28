@@ -1,6 +1,6 @@
 import {
     ApplicationCommandType,
-    ChatInputCommandInteraction,
+    ChatInputCommandInteraction, Client,
     CommandInteraction,
     ContextMenuCommandInteraction,
     Events,
@@ -8,7 +8,7 @@ import {
     Interaction
 } from "discord.js";
 import {EventHandler} from "../events";
-import {Client} from "../../types/client";
+import "../../types/client";
 import {AuthorizationType} from "../../authorization/authorize";
 import {Command} from "../../types/command";
 import {ContextMenu, contextMenuHandlers} from "../../context_menu/context_menu";
@@ -32,7 +32,7 @@ async function isAuthorized(interaction: CommandInteraction, command: Command | 
 }
 
 async function doChatInputCommand(interaction: ChatInputCommandInteraction): Promise<void> {
-    const command = (interaction.client as Client).commands.get(interaction.commandName);
+    const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command) {
         console.error(`No command matching ${interaction.commandName} was found.`);
