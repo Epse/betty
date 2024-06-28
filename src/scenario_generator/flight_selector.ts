@@ -46,9 +46,10 @@ export class FlightSelector {
     }
 
     public toString(): string {
-        return this.selected
-            .map(x => x.toString())
-            .join("\n");
+        return this.faulter.getNotes() + "\n"
+            + this.selected
+                .map(x => x.toString())
+                .join("\n");
     }
 
     private selectInitial(): this {

@@ -16,11 +16,18 @@ Types of faults
 - non-LoA route?
  */
 export class Faulter {
+    private notes = "; FAULTS\n";
+
+    public getNotes(): string {
+        return this.notes;
+    }
+
     public fault(flightPlan: FlightPlan): FlightPlan {
         let shuffled: Fault[] = shuffleArray([...faults]);
 
         for (const fault of shuffled) {
             if (fault.applicable(flightPlan)) {
+                this.notes += `; ${flightPlan.callsign}: ${fault.name}\n`
                 return fault.apply(flightPlan);
             }
         }
