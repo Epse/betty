@@ -32,6 +32,17 @@ export type AtcGroup =
     | "atcLXApp"
     ;
 
+export type TrafficType =
+    | "Light"
+    | "LowCost"
+    | "NonSchengen"
+    | "Schengen"
+    | "Cargo"
+    | "Military"
+    | "Medium"
+    | "Heavy"
+    ;
+
 export interface RouteDefinition {
     spawn: string,
     route: string | null, // Without $ROUTE, without callsign or options
@@ -52,6 +63,13 @@ export interface AirportData {
     configurations: {
         [key: string]: Configuration
     },
+    /*
+    When deciding a departure spawn, we iterate over this mapping in order
+    The first mapping entry where all types match will give us the list of aprons to randomly select from.
+    Empty array always matches.
+    Empty mapping ensures we always pick at random
+     */
+    apronMapping: { types: TrafficType[], aprons: string[] }[],
     intensity: { [key in "LOW" | "MEDIUM" | "HIGH"]: TrafficCounts },
     elevation: string,
     departureAltitude: string,

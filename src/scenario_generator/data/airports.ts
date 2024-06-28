@@ -115,6 +115,13 @@ const ebbr_vfr_with_01: RouteDefinition[] = [
 export default {
     "EBBR": {
         "atcGroup": "atcBRApp",
+        apronMapping: [
+            {types: ["Cargo"], aprons: ["apron-9"]},
+            {types: ["Light"], aprons: ["apron-GA"]},
+            {types: ["LowCost", "Schengen"], aprons: ["apron-1-north-low-cost"]},
+            {types: ["Schengen"], aprons: ["apron-1-north", "apron-1-south"]},
+            {types: [], aprons: ["apron-2-north", "apron-2-south"]}, // Fallback
+        ],
         "departureAltitude": "6000",
         "elevation": "175.0",
         "configurations": {
@@ -253,6 +260,14 @@ export default {
     },
     "ELLX": {
         "atcGroup": "atcLXApp",
+        apronMapping: [
+            {types: ["Heavy"], aprons: ["apron-P1-V-heavy"]},
+            {types: ["Light"], aprons: ["apron-P5"]},
+            {types: ["Cargo"], aprons: ["apron-P10-Z"]},
+            {types: ["NonSchengen", "LowCost"], aprons: ["apron-P1-V-nonshengen"]}, // That typo is in the gate manager, ugh
+            {types: ["NonSchengen"], aprons: ["apron-P1-A-nonshengen"]},
+            {types: ["Medium"], aprons: ["apron-P1-A"]},
+        ],
         "elevation": "1234.0",
         "departureAltitude": "4000",
         "configurations": {
@@ -368,6 +383,12 @@ export default {
     },
     "EBOS": {
         "atcGroup": "atcLow",
+        apronMapping: [
+            {types: ["Cargo"], aprons: ["apron-1", "apron-2-cargo"]},
+            {types: ["Light"], aprons: ["apron-3"]},
+            {types: ["Medium"], aprons: ["apron-2"]},
+            {types: [], aprons: ["apron-2-overflow"]}
+        ],
         "configurations": {
             "26": {
                 "approaches": ["ILS26:51.2023081:2.8909895:51.1972448:2.8575650"],
@@ -429,6 +450,10 @@ export default {
     },
     "EBAW": {
         "atcGroup": "atcBRApp",
+        apronMapping: [
+            {types: ["Light"], aprons: ["apron-2", "apron-GA"]},
+            {types: [], aprons: ["apron-1"]},
+        ],
         "departureAltitude": "3000",
         "elevation": "32.0",
         "configurations": {
@@ -562,6 +587,11 @@ export default {
     },
     "EBCI": {
         "atcGroup": "atcBRApp",
+        apronMapping: [
+            {types: ["Heavy"], aprons: ["apron-P10-heavy", "apron-P11-heavy"]},
+            {types: ["Light"], aprons: ["apron-P1", "apron-P3", "apron-P4"]},
+            {types: [], aprons: ["apron-P10", "apron-P11", "apron-P12", "apron-P13", "apron-P14", "apron-P15"]},
+        ],
         "departureAltitude": "4000",
         "elevation": "606.0",
         "configurations": {
@@ -671,6 +701,11 @@ export default {
     },
     "EBLG": {
         "atcGroup": "atcLGApp",
+        apronMapping: [
+            {types: ["Light"], aprons: ["apron-GA"]},
+            {types: ["Cargo"], aprons: ["apron-north"]},
+            {types: [], aprons: ["apron-P1"]}, // Good enough
+        ],
         "departureAltitude": "5000",
         "elevation": "651.0",
         "configurations": {
