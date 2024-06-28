@@ -159,7 +159,7 @@ export default {
             content: 'There you go, safe skies!',
             files: [
                 new AttachmentBuilder(Buffer.from(scenario, 'utf8'))
-                    .setName('scenario.txt')
+                    .setName(`scenario_${airport}-${runwayConfig}-${intensity}.txt`)
                     .setDescription('Scenario file as you requested')
             ]
         });
