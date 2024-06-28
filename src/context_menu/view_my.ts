@@ -1,7 +1,8 @@
 import {
     ApplicationCommandType,
     ContextMenuCommandBuilder,
-    ContextMenuCommandInteraction, GuildMember, UserContextMenuCommandInteraction
+    ContextMenuCommandInteraction,
+    UserContextMenuCommandInteraction
 } from "discord.js";
 import {ContextMenu} from "./context_menu";
 import {PublicAuthorization} from "../authorization/authorize";
@@ -10,7 +11,7 @@ import {cidFromDiscord} from "../util/cid_from_discord";
 const data = new ContextMenuCommandBuilder()
     .setName('View on My Belux')
     .setType(ApplicationCommandType.User)
-    .setDMPermission(false);
+;
 
 async function execute(interaction: ContextMenuCommandInteraction): Promise<void> {
     if (!(interaction instanceof UserContextMenuCommandInteraction)) {
