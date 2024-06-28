@@ -59,9 +59,20 @@ export class FlightSelector {
             .filter(x => x.rules === "I")
         ;
 
+        const faultCount = Math.round(
+            this.desired.faults / (this.desired.initial + this.desired.ifrDepartures) * this.desired.initial);
+        // In theory this could generate only one actual fault, who cares
+        let faults = new Array(this.desired.initial).map(_x => false);
+        for (let i = 0; i < faultCount; i++) {
+            const idx = Math.round(Math.random() * (faults.length - 1));
+            faults[idx] = true;
+        }
+
         for (let x = 0; x < this.desired.initial; x++) {
             toBeAdded.push(
-                new DepartureFlightPlan(departures[x])
+                new DepartureFlightPlan(
+                    faults[x] ? this.faulter.fault(departures[x]) : departures[x]
+                )
                     .setStart(0)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
                     .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
@@ -77,9 +88,11 @@ export class FlightSelector {
         const interval = Math.round(this.duration / (this.desired.ifrDepartures) + 1);
         let toBeAdded: ScheduledFlightPlan[] = [];
 
+        const faultCount = Math.round(
+            this.desired.faults / (this.desired.initial + this.desired.ifrDepartures) * this.desired.ifrDepartures);
         // In theory this could generate only one actual fault, who cares
         let faults = new Array(this.desired.ifrDepartures).map(_x => false);
-        for (let i = 0; i < this.desired.faults; i++) {
+        for (let i = 0; i < faultCount; i++) {
             const idx = Math.round(Math.random() * (faults.length - 1));
             faults[idx] = true;
         }
