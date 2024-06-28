@@ -4,22 +4,8 @@ import {ArrivalFlightPlan, DepartureFlightPlan, ScheduledFlightPlan} from "./sch
 import airports from "./data/airports";
 import {GateAssigner} from "./gate_assigner";
 import {makeAVFR} from "./make_a_vfr";
-
-/**
- * Performs an in-place Fischer-Yates shuffle on the provided array,
- * returning a reference to that same array.
- *
- * Make copies at your own peril if so required.
- * @param array
- */
-function shuffleArray<T>(array: T[]): T[] {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-
-    return array;
-}
+import {Faulter} from "./faulter";
+import {shuffleArray} from "../util/shuffle_array";
 
 export class FlightSelector {
     private readonly flightPlans: FlightPlan[];
@@ -27,6 +13,7 @@ export class FlightSelector {
     public readonly duration = 60; // 60 minutes
     private readonly currentConfiguration: Configuration;
     private gates: GateAssigner;
+    private faulter = new Faulter();
 
     public constructor(public readonly initialPseudoPilot: string,
                        public readonly airport: ScenarioAirport,
@@ -55,18 +42,7 @@ export class FlightSelector {
             .selectIfrDepartures()
             .selectIfrArrivals()
             .selectVfrDepartures()
-            .selectVfrArrivals()
-            .generateFaults();
-    }
-
-    public generateFaults(): this {
-        // TODO
-
-        return this;
-    }
-
-    public get(): ScheduledFlightPlan[] {
-        return this.selected;
+            .selectVfrArrivals();
     }
 
     public toString(): string {
@@ -99,6 +75,14 @@ export class FlightSelector {
         // Divide the duration by 1 more than the amount of departures, to leave space for initial
         const interval = Math.round(this.duration / (this.desired.ifrDepartures) + 1);
         let toBeAdded: ScheduledFlightPlan[] = [];
+
+        // In theory this could generate only one actual fault, who cares
+        let faults = new Array(this.desired.ifrDepartures).map(_x => false);
+        for (let i = 0; i < this.desired.faults; i++) {
+            const idx = Math.round(Math.random() * (faults.length - 1));
+            faults[idx] = true;
+        }
+
         const departures = this.flightPlans
             .filter(x => x.departure == this.airport)
             .filter(x => x.rules === "I")
@@ -106,7 +90,9 @@ export class FlightSelector {
 
         for (let x = 0; x < this.desired.ifrDepartures; x++) {
             toBeAdded.push(
-                new DepartureFlightPlan(departures[x])
+                new DepartureFlightPlan(
+                    faults[x] ? this.faulter.fault(departures[x]) : departures[x]
+                )
                     .setStart((x + 1) * interval)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
                     .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())

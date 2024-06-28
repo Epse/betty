@@ -1,7 +1,7 @@
 import {FlightPlan} from "./flight_plan";
 
 export abstract class ScheduledFlightPlan {
-    protected readonly flightPlan: FlightPlan;
+    public readonly flightPlan: FlightPlan;
     protected position: string;
     public abstract readonly type: string;
     protected start: number;

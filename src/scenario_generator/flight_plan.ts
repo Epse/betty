@@ -17,17 +17,17 @@ export class FlightPlan {
     public readonly squawk: string;
 
     public constructor(
-        public readonly callsign: string,
-        public readonly rules: "I" | "V",
-        public readonly aircraft: string, // includes weight category
-        public readonly departure: string,
-        public readonly departureTime: string,
-        public readonly route: string,
-        public readonly tas: string,
-        public readonly rfl: string,
-        public readonly arrival: string,
-        public readonly flightTime: string,
-        public readonly alternate: string,
+        public callsign: string,
+        public rules: "I" | "V",
+        public aircraft: string, // includes weight category
+        public departure: string,
+        public departureTime: string,
+        public route: string,
+        public tas: string,
+        public rfl: string,
+        public arrival: string,
+        public flightTime: string,
+        public alternate: string,
     ) {
         this.squawk = this.generateSquawk();
     }
