@@ -125,7 +125,7 @@ export default {
 
         await interaction.reply({
             ephemeral: true,
-            content: "👷‍♀️ We're still building this! 🚧"
+            content: "👷‍♀️ Welcome to the Scenario Construction Zone! Standby for questioning 🚧"
         });
 
         // TODO: handle timeouts
