@@ -1,31 +1,30 @@
 import {
     ApplicationCommandType,
     ContextMenuCommandBuilder,
-    ContextMenuCommandInteraction, GuildMember, UserContextMenuCommandInteraction
+    ContextMenuCommandInteraction,
+    UserContextMenuCommandInteraction
 } from "discord.js";
 import {ContextMenu} from "./context_menu";
 import {PublicAuthorization} from "../authorization/authorize";
+import {cidFromDiscord} from "../util/cid_from_discord";
 
 const data = new ContextMenuCommandBuilder()
     .setName('View on My Belux')
     .setType(ApplicationCommandType.User)
-    .setDMPermission(false);
+;
 
-async function execute(_interaction: ContextMenuCommandInteraction): Promise<void> {
-    if (!(_interaction instanceof UserContextMenuCommandInteraction)) {
+async function execute(interaction: ContextMenuCommandInteraction): Promise<void> {
+    if (!(interaction instanceof UserContextMenuCommandInteraction)) {
         return;
     }
-    const interaction = _interaction as UserContextMenuCommandInteraction;
-    const parts = ((interaction.targetMember as GuildMember).nickname).split(' - ');
-    if (parts.length !== 2) {
+    const cid = await cidFromDiscord(interaction.targetUser.id);
+    if (cid === undefined) {
         await interaction.reply({
             ephemeral: true,
-            content: 'User does not appear to have a CID in their nick, sorry'
+            content: "User does not have an associated CID through VATSIM, sorry 😞"
         });
         return;
     }
-
-    const cid = parts[1];
 
     await interaction.reply({
         ephemeral: true,
