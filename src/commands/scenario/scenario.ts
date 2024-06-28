@@ -10,6 +10,7 @@ Data to collect for scenario generator:
 This gets fed into the script.
  */
 
+import "../../types/client";
 import {Command} from "../../types/command";
 import {PublicAuthorization} from "../../authorization/authorize";
 import {
@@ -131,7 +132,11 @@ export default {
         // TODO: handle timeouts
         const runwayConfig = await getRunwayConfig(airport, interaction);
 
-        const scenarioGeneratorDir = await fs.promises.mkdtemp(path.join(tmpdir(), "scenario-generator-"));
+        const scenarioGeneratorDir =
+            interaction.client.cache.has('scenario-generator-dir')
+                ? interaction.client.cache.get('scenario-generator-dir') as string
+                : await fs.promises.mkdtemp(path.join(tmpdir(), "scenario-generator-"));
+        interaction.client.cache.set('scenario-generator-dir', scenarioGeneratorDir);
         const generator = new ScenarioGenerator(scenarioGeneratorDir, airport, runwayConfig, pseudo)
             .setIntensity(intensity);
 
