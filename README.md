@@ -46,6 +46,35 @@ You will find these documented in `.env.example`.
 These env files can be mounted in the container and read by Betty herself,
 or read by Docker and kept safely outside the container.
 
+### A few notes on Permissions
+
+Most of the Betty features require the permissions you'd imagine,
+as well as the `Read Message History` permission.
+
+The autodelete feature, called `backup_request`, requires the following on the channel in question:
+- view channel
+- manage messages
+- read message history
+
+The events announcement channel requires:
+- view channel
+- send messages
+- Send Messages in Threads
+- Create Public Threads
+- Create Private Threads
+- Embed Links
+- Attach Files
+- Mention @everyone, @here and All Roles
+- Manage Messages
+- Manage Threads
+- Read Message History
+
+The live stats feature requires:
+- view channel
+- read message history
+- send messages
+- embed links
+
 ### Deployment
 
 Betty is available as a Docker image under `stefpletinck/betty`.
