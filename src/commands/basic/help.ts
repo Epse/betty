@@ -21,11 +21,12 @@ Right now, you can use:
 - \`/${config.name.toLowerCase()}\` to view this help
 - \`/atis\` to view an ATIS
 - \`/event\` to publish an event
+- \`/scenario\` to build scenario files
 - \`/license\` for info on, well, licensing
 
 Type a command to view in-line documentation on its arguments and usage.
 
-\`/atis\` is available in DMs.
+\`/atis\` and \`/scenario\` are available in DMs.
 You may not have permission to run some or most commands.
 `
         });
