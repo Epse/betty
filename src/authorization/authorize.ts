@@ -26,15 +26,15 @@ export class PublicAuthorization extends BaseAuthorization {
 
 export class RoleAuthorization extends BaseAuthorization {
     public type: AuthorizationType = AuthorizationType.Role;
-    readonly role: string;
+    readonly roles: string[];
 
-    public constructor(role: string) {
+    public constructor(roles: string[]) {
         super();
-        this.role = role;
+        this.roles = roles;
     }
 
     public allowed(member: GuildMember): boolean {
-        return member.roles.cache.some(role => role.name === this.role);
+        return member.roles.cache.some(role => this.roles.findIndex(x => x === role.name) !== -1);
     }
 }
 
@@ -42,6 +42,6 @@ export class BoardAuthorization extends RoleAuthorization {
     public type: AuthorizationType = AuthorizationType.Board;
 
     public constructor() {
-        super("Board");
+        super(["Board"]);
     }
 }

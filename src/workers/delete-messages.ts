@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import {Client} from "../types/client";
-import {BaseGuildTextChannel, Channel} from "discord.js";
+import "../types/client";
+import {BaseGuildTextChannel, Channel, Client} from "discord.js";
 import config from "../util/config";
 
 export default async (client: Client) => {

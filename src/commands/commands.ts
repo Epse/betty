@@ -4,6 +4,7 @@ import {Command} from "../types/command";
 import atis from "./basic/atis";
 import event from "./events/event";
 import license from "./basic/license";
+import scenario from "./scenario/scenario";
 
 export default [
     help,
@@ -11,4 +12,5 @@ export default [
     atis,
     event,
     license,
+    scenario,
 ] as Command[];

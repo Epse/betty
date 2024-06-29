@@ -1,6 +1,6 @@
-import {Client} from '../../types/client';
+import '../../types/client';
 
-import {Events} from 'discord.js';
+import {Client, Events} from 'discord.js';
 import {EventHandler} from "../events";
 import {liveStats} from "../../workers/live-stats";
 
