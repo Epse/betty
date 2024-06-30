@@ -43,7 +43,7 @@ function getControllerFields(data: any): APIEmbedField[] {
         .filter(controller => controller['frequency'] !== '199.998')
         .map(controller => ({
                 name: `🟢 ${controller['callsign']}`,
-                value: `${controller['frequency']} | [${controller['name']}](https://stats.vatsim.net/stats/${controller['cid']})`,
+                value: `${controller['frequency']} | [${controller['name']}](https://stats.vatsim.net/stats/${controller['cid']}) since ${makeTimestamp(controller['logon_time'], TimestampFormat.Relative)}`,
                 inline: false
         }));
 }
