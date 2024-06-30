@@ -1,6 +1,5 @@
 import airports from "./airports";
-
-// TODO: probably also want caching here
+import "../../types/cache";
 
 export class Gate {
     public readonly altitude: string;
@@ -27,12 +26,16 @@ export class Gate {
 }
 
 export async function fetchGates(): Promise<Gate[]> {
+    if (global.cache.has('gates')) {
+        return global.cache.get('gates') as Gate[];
+    }
+
     const response = await fetch('https://api.beluxvacc.org/belux-gate-manager-api/gates/');
     if (!response.ok) {
         throw new Error(response.statusText);
     }
 
-    return await response.json()
+    const gates = await response.json()
         .then((body: Object[]): Gate[] =>
             body.map(x => new Gate(
                 x['airport'],
@@ -42,4 +45,6 @@ export async function fetchGates(): Promise<Gate[]> {
                 x['longitude'],
                 x['heading']
             )));
+    global.cache.set('gates', gates);
+    return gates;
 }

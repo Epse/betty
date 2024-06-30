@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import "../types/client";
+import "../types/cache";
 import {BaseGuildTextChannel, Channel, Client} from "discord.js";
 import config from "../util/config";
 

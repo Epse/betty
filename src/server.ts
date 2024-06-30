@@ -1,4 +1,4 @@
-import "./types/client";
+import "./types/cache";
 
 require('dotenv')
     .config();
