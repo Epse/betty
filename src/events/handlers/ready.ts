@@ -1,4 +1,4 @@
-import '../../types/client';
+import '../../types/cache';
 
 import {Client, Events} from 'discord.js';
 import {EventHandler} from "../events";

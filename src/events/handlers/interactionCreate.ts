@@ -8,7 +8,7 @@ import {
     Interaction
 } from "discord.js";
 import {EventHandler} from "../events";
-import "../../types/client";
+import "../../types/cache";
 import {AuthorizationType} from "../../authorization/authorize";
 import {Command} from "../../types/command";
 import {ContextMenu, contextMenuHandlers} from "../../context_menu/context_menu";

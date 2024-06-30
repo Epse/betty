@@ -10,7 +10,7 @@ Data to collect for scenario generator:
 This gets fed into the script.
  */
 
-import "../../types/client";
+import "../../types/cache";
 import {Command} from "../../types/command";
 import {PublicAuthorization} from "../../authorization/authorize";
 import {

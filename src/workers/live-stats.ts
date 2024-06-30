@@ -1,4 +1,4 @@
-import "../types/client";
+import "../types/cache";
 import {APIEmbedField, BaseGuildTextChannel, Client, EmbedBuilder} from "discord.js";
 import {makeTimestamp, TimestampFormat} from "../util/timestamp";
 import config from "../util/config";
