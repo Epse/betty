@@ -2,7 +2,7 @@ import {SubCommand} from "../../types/command";
 import {
     BaseGuildTextChannel,
     ChannelType,
-    ChatInputCommandInteraction,
+    ChatInputCommandInteraction, DiscordAPIError,
     EmbedBuilder,
     SlashCommandSubcommandBuilder
 } from "discord.js";
@@ -74,13 +74,22 @@ export default {
             });
             return;
         }
-        await (channel as BaseGuildTextChannel).send({
+        const message = await (channel as BaseGuildTextChannel).send({
             embeds: [embed]
         });
         await interaction.reply({
             ephemeral: true,
             content: "👍 event posted!"
         });
+        try {
+            await message.crosspost();
+        } catch (e) {
+            await interaction.followUp({
+                ephemeral: true,
+                content: 'Could not crosspost, target channel is probably not an announcement channel'
+            });
+            console.log('Could not crosspost event, error: ' + e);
+        }
     }
 
 } satisfies SubCommand;
