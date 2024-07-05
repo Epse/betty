@@ -67,7 +67,7 @@ const execute = async (interaction: ChatInputCommandInteraction) => {
     infoMessage += `### ${loa}\n\n`;
     infoMessage += 'https://beluxvacc.org/controller-files/';
     if (text !== null) {
-        infoMessage += `\n\n${text}`;
+        infoMessage += `\n\n${text}\n`;
     }
     infoMessage += config.loa.mention_roles.map(x => `<@&${x}>`).join(' ');
 
