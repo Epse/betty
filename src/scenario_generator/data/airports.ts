@@ -134,8 +134,18 @@ export default {
                 routes: {
                     vfr: ebbr_vfr_not_01,
                     ifr: [
-                        ebbr_25r_ifr,
-                        ebbr_25l_ifr
+                        {
+                            spawn: ebbr_25r_spawn,
+                            route: "NAXOD RWR25 ILS25R",
+                            reqAlt: "NAXOD:2000",
+                            only: [["Military"], ["Light"], ["Cargo"], ["LowCost", "Schengen"]]
+                        },
+                        {
+                            spawn: ebbr_25l_spawn,
+                            route: "IB141/2500 RWL25 ILS25L",
+                            reqAlt: "IBI41:2500",
+                            deny: [["Military"], ["Light"], ["Cargo"], ["LowCost", "Schengen"]]
+                        }
                     ]
                 },
             },
@@ -226,7 +236,18 @@ export default {
                 routes: {
                     vfr: ebbr_vfr_not_01,
                     ifr: [
-                        ebbr_25l_ifr
+                        {
+                            spawn: ebbr_25r_spawn,
+                            route: "NAXOD RWR25 ILS25R",
+                            reqAlt: "NAXOD:2000",
+                            only: [["Military"], ["Light"], ["Cargo"]],
+                        },
+                        {
+                            spawn: ebbr_25l_spawn,
+                            route: "IB141/2500 RWL25 ILS25L",
+                            reqAlt: "IBI41:2500",
+                            deny: [["Military"], ["Light"], ["Cargo"]],
+                        }
                     ]
                 },
             },
