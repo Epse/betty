@@ -48,6 +48,8 @@ export type TrafficType =
     | "Military"
     | "Medium"
     | "Heavy"
+    | "GA"
+    | "Private"
     ;
 
 export interface RouteDefinition {
