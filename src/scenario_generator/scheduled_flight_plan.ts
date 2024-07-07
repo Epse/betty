@@ -35,12 +35,19 @@ export abstract class ScheduledFlightPlan {
 
 export class DepartureFlightPlan extends ScheduledFlightPlan {
     public readonly type = "DEPARTURE";
+    protected reqAlt: string;
+
+    public setReqAlt(reqAlt: string): this {
+        this.reqAlt = reqAlt;
+        return this;
+    }
 
     public toString(): string {
         return this.getDefinitionLine() + "\n"
             + this.flightPlan.getFlightPlanLine(true) + "\n"
             + this.flightPlan.getSimDataLine() + "\n"
             + `START:${this.start.toFixed(0)}\n`
+            + `REQALT:${this.reqAlt}\n`
             + `INITIALPSEUDOPILOT:${this.initialPseudoPilot}\n`
             + "\n";
     }
