@@ -134,9 +134,9 @@ export class FlightPlan {
         // We randomly select between 0o8887 and 0o0, + 1  to avoid selecting 0000
         // 0000 is interpreted by Euroscope as a vehicle
 
-        const maxOctal = parseInt("8887", 9);
+        const maxOctal = parseInt("7776", 8);
         const squawkDecimal = Math.round(Math.random() * maxOctal) + 1;
-        return squawkDecimal.toString(9).padStart(4, '0');
+        return squawkDecimal.toString(8).padStart(4, '0');
     }
 
     private getFuelHours(): string {
