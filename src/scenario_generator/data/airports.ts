@@ -3,12 +3,6 @@ import {AirportData, RouteDefinition, ScenarioAirport} from "../types";
 const ebbr_25r_spawn = "51.0215520:4.8851435:2000:0:2796";
 const ebbr_25l_spawn = "50.9892884:4.9207760:3000:0:2848";
 
-const ebbr_25l_ifr: RouteDefinition = {
-    spawn: ebbr_25l_spawn,
-    route: "IB141/2500 RWL25 ILS25L",
-    reqAlt: "IBI41:2500",
-};
-
 const ebbr_25r_ifr: RouteDefinition = {
     spawn: ebbr_25r_spawn,
     route: "NAXOD RWR25 ILS25R",
@@ -117,7 +111,8 @@ export default {
         "atcGroup": "atcBRApp",
         apronMapping: [
             {types: ["Cargo"], aprons: ["apron-9"]},
-            {types: ["Light"], aprons: ["apron-GA"]},
+            {types: ["GA"], aprons: ["apron-GA"]},
+            {types: ["Private"], aprons: ["apron-51b", "apron-51c"]},
             {types: ["LowCost", "Schengen"], aprons: ["apron-1-north-low-cost"]},
             {types: ["Schengen"], aprons: ["apron-1-north", "apron-1-south"]},
             {types: [], aprons: ["apron-2-north", "apron-2-south"]}, // Fallback
@@ -134,8 +129,18 @@ export default {
                 routes: {
                     vfr: ebbr_vfr_not_01,
                     ifr: [
-                        ebbr_25r_ifr,
-                        ebbr_25l_ifr
+                        {
+                            spawn: ebbr_25r_spawn,
+                            route: "NAXOD RWR25 ILS25R",
+                            reqAlt: "NAXOD:2000",
+                            only: [["Military"], ["GA"], ["Private"], ["Cargo"], ["LowCost", "Schengen"]]
+                        },
+                        {
+                            spawn: ebbr_25l_spawn,
+                            route: "IB141/2500 RWL25 ILS25L",
+                            reqAlt: "IBI41:2500",
+                            deny: [["Military"], ["GA"], ["Private"], ["Cargo"], ["LowCost", "Schengen"]]
+                        }
                     ]
                 },
             },
@@ -226,7 +231,18 @@ export default {
                 routes: {
                     vfr: ebbr_vfr_not_01,
                     ifr: [
-                        ebbr_25l_ifr
+                        {
+                            spawn: ebbr_25r_spawn,
+                            route: "NAXOD RWR25 ILS25R",
+                            reqAlt: "NAXOD:2000",
+                            only: [["Military"], ["GA"], ["Private"], ["Cargo"]],
+                        },
+                        {
+                            spawn: ebbr_25l_spawn,
+                            route: "IB141/2500 RWL25 ILS25L",
+                            reqAlt: "IBI41:2500",
+                            deny: [["Military"], ["GA"], ["Private"], ["Cargo"]],
+                        }
                     ]
                 },
             },
@@ -262,7 +278,7 @@ export default {
         "atcGroup": "atcLXApp",
         apronMapping: [
             {types: ["Heavy"], aprons: ["apron-P1-V-heavy"]},
-            {types: ["Light"], aprons: ["apron-P5"]},
+            {types: ["GA", "Private"], aprons: ["apron-P5"]},
             {types: ["Cargo"], aprons: ["apron-P10-Z"]},
             {types: ["NonSchengen", "LowCost"], aprons: ["apron-P1-V-nonshengen"]}, // That typo is in the gate manager, ugh
             {types: ["NonSchengen"], aprons: ["apron-P1-A-nonshengen"]},
@@ -385,7 +401,7 @@ export default {
         "atcGroup": "atcLow",
         apronMapping: [
             {types: ["Cargo"], aprons: ["apron-1", "apron-2-cargo"]},
-            {types: ["Light"], aprons: ["apron-3"]},
+            {types: ["GA", "Private"], aprons: ["apron-3"]},
             {types: ["Medium"], aprons: ["apron-2"]},
             {types: [], aprons: ["apron-2-overflow"]}
         ],
@@ -451,7 +467,7 @@ export default {
     "EBAW": {
         "atcGroup": "atcBRApp",
         apronMapping: [
-            {types: ["Light"], aprons: ["apron-2", "apron-GA"]},
+            {types: ["Private", "GA"], aprons: ["apron-2", "apron-GA"]},
             {types: [], aprons: ["apron-1"]},
         ],
         "departureAltitude": "3000",
@@ -589,7 +605,7 @@ export default {
         "atcGroup": "atcBRApp",
         apronMapping: [
             {types: ["Heavy"], aprons: ["apron-P10-heavy", "apron-P11-heavy"]},
-            {types: ["Light"], aprons: ["apron-P1", "apron-P3", "apron-P4"]},
+            {types: ["Private", "GA"], aprons: ["apron-P1", "apron-P3", "apron-P4"]},
             {types: [], aprons: ["apron-P10", "apron-P11", "apron-P12", "apron-P13", "apron-P14", "apron-P15"]},
         ],
         "departureAltitude": "4000",
@@ -702,7 +718,7 @@ export default {
     "EBLG": {
         "atcGroup": "atcLGApp",
         apronMapping: [
-            {types: ["Light"], aprons: ["apron-GA"]},
+            {types: ["Private", "GA"], aprons: ["apron-GA"]},
             {types: ["Cargo"], aprons: ["apron-north"]},
             {types: [], aprons: ["apron-P1"]}, // Good enough
         ],

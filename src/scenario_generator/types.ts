@@ -48,12 +48,16 @@ export type TrafficType =
     | "Military"
     | "Medium"
     | "Heavy"
+    | "GA"
+    | "Private"
     ;
 
 export interface RouteDefinition {
     spawn: string,
-    route: string | null, // Without $ROUTE, without callsign or options
+    route?: string | null, // Without $ROUTE, without callsign or options
     reqAlt: string, // In the format fix:alt
+    only?: TrafficType[][], // OR of ANDs
+    deny?: TrafficType[][], // OR of ANDs
 }
 
 export interface Configuration {

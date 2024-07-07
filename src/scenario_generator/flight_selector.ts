@@ -6,6 +6,7 @@ import {GateAssigner} from "./gate_assigner";
 import {makeAVFR} from "./make_a_vfr";
 import {Faulter} from "./faulter";
 import {shuffleArray} from "../util/shuffle_array";
+import {TrafficMatcher} from "./traffic_matcher";
 
 export class FlightSelector {
     private readonly flightPlans: FlightPlan[];
@@ -125,13 +126,18 @@ export class FlightSelector {
             .filter(x => x.arrival == this.airport)
             .filter(x => x.rules == "I")
         ;
-
         for (let x = 0; x < this.desired.ifrArrivals; x++) {
-            const arrivalIndex = Math.round(Math.random() * (this.currentConfiguration.routes.ifr.length - 1));
-            const arrival = this.currentConfiguration.routes.ifr[arrivalIndex];
+            const plan = arrivals[x];
+
+            let candidateRoutes = this.currentConfiguration.routes.ifr
+                .filter(route => route.deny === undefined || !TrafficMatcher.matchesAll(plan, route.deny))
+                .filter(route => route.only === undefined || TrafficMatcher.matchesAll(plan, route.only));
+
+            const arrivalIndex = Math.round(Math.random() * (candidateRoutes.length - 1));
+            const arrival = candidateRoutes[arrivalIndex];
 
             toBeAdded.push(
-                new ArrivalFlightPlan(arrivals[x])
+                new ArrivalFlightPlan(plan)
                     .setStart(x * interval)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
                     .setRoute(arrival.route)
