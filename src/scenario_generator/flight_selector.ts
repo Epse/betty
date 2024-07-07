@@ -134,7 +134,7 @@ export class FlightSelector {
                     .setStart(x * interval)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
                     .setRoute(arrival.route)
-                    .setRoute(arrival.reqAlt)
+                    .setReqAlt(arrival.reqAlt)
                     .setPosition(arrival.spawn)
             );
         }
@@ -188,7 +188,7 @@ export class FlightSelector {
                     .setStart(x * interval)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
                     .setRoute(arrival.route)
-                    .setRoute(arrival.reqAlt)
+                    .setReqAlt(arrival.reqAlt)
                     .setPosition(arrival.spawn)
             );
         }
