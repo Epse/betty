@@ -108,6 +108,7 @@ export class FlightSelector {
                     faults[x] ? this.faulter.fault(departures[x]) : departures[x]
                 )
                     .setStart((x + 1) * interval)
+                    .setReqAlt("EBBR:" + airports[this.airport].departureAltitude)
                     .setInitialPseudoPilot(this.initialPseudoPilot)
                     .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
             );
