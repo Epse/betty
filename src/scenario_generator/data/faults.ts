@@ -48,57 +48,57 @@ export default [
     {
         name: "Wrong LoA: HELEN required for EHAM",
         applicable: isBrussels,
-        apply: routeLevelBadness("HELEN", "DENUT", "1400"),
+        apply: routeLevelBadness("HELEN", "DENUT", "14000"),
     },
     {
         name: "Wrong LoA: FL210 or below for EDDL, FL230 is filed",
         applicable: isBrussels,
-        apply: routeLevelBadness("EDDL", "LNO M170 NVO T857 BIKMU", "2300")
+        apply: routeLevelBadness("EDDL", "LNO M170 NVO T857 BIKMU", "23000")
     },
     {
         name: "Wrong LoA: FL190 or below for LFPG, FL390 is filed",
         applicable: isBrussels,
-        apply: routeLevelBadness("LFPG", "CIV Y50 MATIX", "3900"),
+        apply: routeLevelBadness("LFPG", "CIV Y50 MATIX", "39000"),
     },
     {
         name: "Flight level fault: 24000 now filed, 23000 was original",
         applicable: isBrussels,
-        apply: routeLevelBadness("EDDF", "SPI T180 NIVNU T847 TUTOV DCT RAMOB UNOKO1A", "2400")
+        apply: routeLevelBadness("EDDF", "SPI T180 NIVNU T847 TUTOV DCT RAMOB UNOKO1A", "24000")
     },
     {
         name: "Wrong LoA: Flights towards EGKK require DENUT - BULAM - TEBRA",
         applicable: isBrussels,
-        apply: routeLevelBadness("EGKK", "KOK TEBRA", "2400"),
+        apply: routeLevelBadness("EGKK", "KOK TEBRA", "24000"),
     },
     {
         name: "Wrong LoA: Flights towards EGKK require DENUT - BULAM - TEBRA",
         applicable: isBrussels,
-        apply: routeLevelBadness("EGKK", "DENUT L610 TEBRA", "2400"),
+        apply: routeLevelBadness("EGKK", "DENUT L610 TEBRA", "24000"),
     },
     {
         name: "Wrong LoA: FL240 or below for EGKK, FL260 is filed",
         applicable: isBrussels,
-        apply: routeLevelBadness("EGKK", "DENUT BULAM TEBRA", "2600"),
+        apply: routeLevelBadness("EGKK", "DENUT BULAM TEBRA", "26000"),
     },
     {
         name: "Wrong Loa: DENUT or HELEN required for flights towards EGTT FIR",
         applicable: isBrussels,
-        apply: routeLevelBadness("EGLL", "CIV M617 CMB B3 RINTI L10 LAM", "2500"),
+        apply: routeLevelBadness("EGLL", "CIV M617 CMB B3 RINTI L10 LAM", "25000"),
     },
     {
         name: "Flight level fault: 19000 now filed, 20000 or even below required",
         applicable: isBrussels,
-        apply: routeLevelBadness("EGGW", "HELEN L179 SASKI L608 LOGAN", "1900"),
+        apply: routeLevelBadness("EGGW", "HELEN L179 SASKI L608 LOGAN", "19000"),
     },
     {
         name: "Wrong LoA: Flights towards EHRD require FL140",
         applicable: isBrussels,
-        apply: routeLevelBadness("EHRD", "HELEN", "1300")
+        apply: routeLevelBadness("EHRD", "HELEN", "13000")
     },
     {
         name: "Wrong LoA: Flights towards EHAM require FL140 and HELEN",
         applicable: isBrussels,
-        apply: routeLevelBadness("EHAM", "DENUT", "1500")
+        apply: routeLevelBadness("EHAM", "DENUT", "15000")
     },
     {
         name: "Wrong LoA: Flights towards EH** require HELEN, but is it?",
@@ -108,6 +108,6 @@ export default [
     {
         name: "Wrong LoA: FL240 or below for EGVN, FL260 is filed",
         applicable: isBrussels,
-        apply: routeLevelBadness("EGVN", "HELEN UL179 GILTI L179 LAM DCT CPT L9 SIREN DCT OSGOD", "2600")
+        apply: routeLevelBadness("EGVN", "HELEN UL179 GILTI L179 LAM DCT CPT L9 SIREN DCT OSGOD", "26000")
     },
 ] satisfies Fault[];
