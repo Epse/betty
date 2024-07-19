@@ -93,7 +93,7 @@ export class FlightSelector {
 
     private selectIfrDepartures(): this {
         // Divide the duration by 1 more than the amount of departures, to leave space for initial
-        const interval = Math.round(this.duration / (this.desired.ifrDepartures) + 1);
+        const interval = Math.round(this.duration / (this.desired.ifrDepartures + 1));
         let toBeAdded: ScheduledFlightPlan[] = [];
 
         const faultCount = Math.round(
