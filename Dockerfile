@@ -1,4 +1,4 @@
-FROM node:22-alpine as compile
+FROM node:22.4-alpine as compile
 RUN apk --no-cache add curl python3 build-base
 WORKDIR /usr/src/app
 COPY package*.json ./
@@ -6,13 +6,13 @@ RUN npm ci --include dev
 COPY . .
 RUN ["npx", "tsup", "src/server.ts", "src/deploy-commands.ts", "--minify"]
 
-FROM node:22-alpine as modules
+FROM node:22.4-alpine as modules
 RUN apk --no-cache add curl python3 build-base
 WORKDIR /usr/src/app
 COPY --from=compile /usr/src/app/package*.json ./
 RUN npm ci --omit dev
 
-FROM node:22-alpine
+FROM node:22.4-alpine
 RUN apk --no-cache add curl
 WORKDIR /usr/src/app
 COPY --from=modules /usr/src/app/node_modules ./node_modules
