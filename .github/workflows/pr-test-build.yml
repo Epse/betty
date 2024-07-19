@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: PR Test Build
 
 on:
   pull_request:
@@ -9,5 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag stefpletinck/betty:$(git rev-parse HEAD)
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.4.x
+    - name: Install dependencies
+      run: npm ci --include dev
+    - name: Build
+      run: npx tsup src/server.ts src/deploy-commands.ts --minify
