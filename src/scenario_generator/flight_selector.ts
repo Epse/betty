@@ -53,9 +53,15 @@ export class FlightSelector {
                 .join("\n");
     }
 
+    private availableFlightPlans(): FlightPlan[] {
+        return this.flightPlans
+            .filter(fp =>
+                this.selected.findIndex(x => x.flightPlan.callsign === fp.callsign) == -1);
+    }
+
     private selectInitial(): this {
         let toBeAdded: ScheduledFlightPlan[] = [];
-        const departures = this.flightPlans
+        const departures = this.availableFlightPlans()
             .filter(x => x.departure == this.airport)
             .filter(x => x.rules === "I")
         ;
@@ -98,7 +104,7 @@ export class FlightSelector {
             faults[idx] = true;
         }
 
-        const departures = this.flightPlans
+        const departures = this.availableFlightPlans()
             .filter(x => x.departure == this.airport)
             .filter(x => x.rules === "I")
         ;
@@ -122,7 +128,7 @@ export class FlightSelector {
         // No +1 to make sure they start right away
         const interval = Math.round(this.duration / this.desired.ifrArrivals);
         let toBeAdded: ScheduledFlightPlan[] = [];
-        const arrivals = this.flightPlans
+        const arrivals = this.availableFlightPlans()
             .filter(x => x.arrival == this.airport)
             .filter(x => x.rules == "I")
         ;
@@ -153,7 +159,7 @@ export class FlightSelector {
     private selectVfrDepartures(): this {
         const interval = Math.round(this.duration / this.desired.vfrDepartures);
         let toBeAdded: ScheduledFlightPlan[] = [];
-        const departures = this.flightPlans
+        const departures = this.availableFlightPlans()
             .filter(x => x.departure == this.airport)
             .filter(x => x.rules === "V")
         ;
@@ -177,7 +183,7 @@ export class FlightSelector {
     private selectVfrArrivals(): this {
         const interval = Math.round(this.duration / this.desired.vfrArrivals);
         let toBeAdded: ScheduledFlightPlan[] = [];
-        const arrivals = this.flightPlans
+        const arrivals = this.availableFlightPlans()
             .filter(x => x.arrival == this.airport)
             .filter(x => x.rules == "V")
         ;
