@@ -60,6 +60,10 @@ export interface RouteDefinition {
     deny?: TrafficType[][], // OR of ANDs
 }
 
+export interface BalanceCategories {
+    [key: string]: BalanceCategory
+}
+
 export interface Configuration {
     approaches: string[],
     routeFiles: string[],
@@ -68,9 +72,7 @@ export interface Configuration {
         ifr: RouteDefinition[],
     }
     // Traffic will as much as possible be balanced across these categories
-    departureBalanceCategories?: {
-        [key: string]: BalanceCategory
-    }
+    departureBalanceCategories?: BalanceCategories
 }
 
 /*
