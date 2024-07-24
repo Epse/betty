@@ -60,6 +60,10 @@ export interface RouteDefinition {
     deny?: TrafficType[][], // OR of ANDs
 }
 
+export interface BalanceCategories {
+    [key: string]: BalanceCategory
+}
+
 export interface Configuration {
     approaches: string[],
     routeFiles: string[],
@@ -67,6 +71,21 @@ export interface Configuration {
         vfr: RouteDefinition[],
         ifr: RouteDefinition[],
     }
+    // Traffic will as much as possible be balanced across these categories
+    departureBalanceCategories?: BalanceCategories
+}
+
+/*
+Defines categories to be assigned to departing traffic,
+such that these different categories will all receive a rougly equal amount of traffic.
+
+Traffic is assigned to the first category that matches one of its types or initial fix,
+or a hidden "Others" category.
+ */
+export interface BalanceCategory {
+    types?: TrafficType[],
+    fixes?: string[],
+    proportion: number, // Which fraction of the traffic should this receive?
 }
 
 export interface ApronMapping {

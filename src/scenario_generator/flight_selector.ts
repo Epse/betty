@@ -7,6 +7,7 @@ import {makeAVFR} from "./make_a_vfr";
 import {Faulter} from "./faulter";
 import {shuffleArray} from "../util/shuffle_array";
 import {TrafficMatcher} from "./traffic_matcher";
+import {BalanceSplitter} from "./balance_splitter";
 
 export class FlightSelector {
     private readonly flightPlans: FlightPlan[];
@@ -15,6 +16,7 @@ export class FlightSelector {
     private readonly currentConfiguration: Configuration;
     private gates: GateAssigner;
     private faulter = new Faulter();
+    private readonly splitter: BalanceSplitter;
 
     public constructor(public readonly initialPseudoPilot: string,
                        public readonly airport: ScenarioAirport,
@@ -28,6 +30,7 @@ export class FlightSelector {
         }
 
         this.gates = new GateAssigner();
+        this.splitter = new BalanceSplitter(this.currentConfiguration.departureBalanceCategories);
     }
 
     public async setup(): Promise<this> {
@@ -60,12 +63,10 @@ export class FlightSelector {
     }
 
     private selectInitial(): this {
-        let toBeAdded: ScheduledFlightPlan[] = [];
         const departures = this.availableFlightPlans()
             .filter(x => x.departure == this.airport)
             .filter(x => x.rules === "I")
         ;
-
         const faultCount = Math.round(
             this.desired.faults / (this.desired.initial + this.desired.ifrDepartures) * this.desired.initial);
         // In theory this could generate only one actual fault, who cares
@@ -75,26 +76,24 @@ export class FlightSelector {
             faults[idx] = true;
         }
 
-        for (let x = 0; x < this.desired.initial; x++) {
-            toBeAdded.push(
-                new DepartureFlightPlan(
-                    faults[x] ? this.faulter.fault(departures[x]) : departures[x]
-                )
-                    .setStart(0)
-                    .setReqAlt("EBBR:" + airports[this.airport].departureAltitude)
-                    .setInitialPseudoPilot(this.initialPseudoPilot)
-                    .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
+        const split = this.splitter.split(departures);
+        const toBeAdded = split
+            .flatMap(balance => balance.flightPlans.slice(0, Math.round(this.desired.initial * balance.proportion)))
+            .map((val, idx) => faults[idx] ? this.faulter.fault(val) : val)
+            .map(plan => new DepartureFlightPlan(plan)
+                .setStart(0)
+                .setReqAlt("EBBR:" + airports[this.airport].departureAltitude)
+                .setInitialPseudoPilot(this.initialPseudoPilot)
+                .setPosition(this.gates.for(this.airport, plan).toLocationString())
             );
-        }
 
-        this.selected.push(...toBeAdded);
+        this.selected.push(...shuffleArray(toBeAdded)); // They all start at 0, so this is fine
         return this;
     }
 
     private selectIfrDepartures(): this {
         // Divide the duration by 1 more than the amount of departures, to leave space for initial
         const interval = Math.round(this.duration / (this.desired.ifrDepartures + 1));
-        let toBeAdded: ScheduledFlightPlan[] = [];
 
         const faultCount = Math.round(
             this.desired.faults / (this.desired.initial + this.desired.ifrDepartures) * this.desired.ifrDepartures);
@@ -110,17 +109,19 @@ export class FlightSelector {
             .filter(x => x.rules === "I")
         ;
 
-        for (let x = 0; x < this.desired.ifrDepartures; x++) {
-            toBeAdded.push(
-                new DepartureFlightPlan(
-                    faults[x] ? this.faulter.fault(departures[x]) : departures[x]
-                )
-                    .setStart((x + 1) * interval)
-                    .setReqAlt("EBBR:" + airports[this.airport].departureAltitude)
-                    .setInitialPseudoPilot(this.initialPseudoPilot)
-                    .setPosition(this.gates.for(this.airport, departures[x]).toLocationString())
+        const split = this.splitter.split(departures);
+        // Shuffle after merging the categories, before the faulting
+        const toBeAdded = shuffleArray(split
+            .flatMap(balance =>
+                balance.flightPlans.slice(0, Math.round(this.desired.ifrDepartures * balance.proportion))))
+            .map((val, idx) => faults[idx] ? this.faulter.fault(val) : val)
+            .map((plan, idx) => new DepartureFlightPlan(plan)
+                .setStart((idx + 1) * interval)
+                .setReqAlt("EBBR:" + airports[this.airport].departureAltitude)
+                .setInitialPseudoPilot(this.initialPseudoPilot)
+                .setPosition(this.gates.for(this.airport, plan).toLocationString())
             );
-        }
+
         this.selected.push(...toBeAdded);
         return this;
     }
