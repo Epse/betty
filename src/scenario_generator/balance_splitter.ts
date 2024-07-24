@@ -22,35 +22,42 @@ export class BalanceSplitter {
             }];
         }
 
-        const categories = this.makeCategories();
+        const balanced = this.makeCategories();
+        plans: for (const flightPlan of flightPlans) {
+            for (const key in balanced) {
+                if (key === 'Other')
+                    continue;
 
-        for (const flightPlan of flightPlans) {
-            for (const category of categories) {
-                if (this.matches(flightPlan, category)) {
-                    category.flightPlans.push(flightPlan)
-                    break;
+                if (this.matches(flightPlan, this.categories[key])) {
+                    balanced[key].flightPlans.push(flightPlan);
+                    continue plans;
                 }
             }
-            categories[0].flightPlans.push(flightPlan); // Always the Other category
+
+            balanced['Other'].flightPlans.push(flightPlan);
         }
 
-        return categories;
+        return Object.values(balanced);
     }
 
-    private makeCategories(): BalancedPlan[] {
+    private makeCategories(): { [key: string]: BalancedPlan } {
         const proportion = 1 - Object.values(this.categories)
             .map(x => x.proportion)
             .reduce((prev, current) => prev + current, 0);
 
-        let categories: BalancedPlan[] =  [{
-            proportion,
-            flightPlans: []
-        }];
+        let categories: { [key: string]: BalancedPlan } = {
+            'Other': {
+                proportion,
+                flightPlans: []
+            }
+        };
 
-        categories.push(...Object.values(this.categories).map(x => ({
-            proportion: x.proportion,
-            flightPlans: []
-        })));
+        for (const key in this.categories) {
+            categories[key] = {
+                proportion: this.categories[key].proportion,
+                flightPlans: []
+            }
+        }
 
         return categories;
     }
@@ -58,7 +65,7 @@ export class BalanceSplitter {
     private matches(flightPlan: FlightPlan, category: BalanceCategory): boolean {
         if (category.fixes !== undefined) {
             const initial = firstFix(flightPlan.route);
-            for (const fix in category.fixes) {
+            for (const fix of category.fixes) {
                 if (fix === initial)
                     return true;
             }
@@ -67,7 +74,7 @@ export class BalanceSplitter {
         if (category.types === undefined)
             return false; // Didn't match a fix and there's no types, we will never match
 
-        for (const type in category.types) {
+        for (const type of category.types) {
             if (TrafficMatcher.checkOneType(flightPlan, type as TrafficType)) {
                 return true;
             }
