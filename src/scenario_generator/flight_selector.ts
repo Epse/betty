@@ -87,7 +87,7 @@ export class FlightSelector {
                 .setPosition(this.gates.for(this.airport, plan).toLocationString())
             );
 
-        this.selected.push(...toBeAdded);
+        this.selected.push(...shuffleArray(toBeAdded)); // They all start at 0, so this is fine
         return this;
     }
 
@@ -110,8 +110,10 @@ export class FlightSelector {
         ;
 
         const split = this.splitter.split(departures);
-        const toBeAdded = split
-            .flatMap(balance => balance.flightPlans.slice(0, Math.round(this.desired.initial * balance.proportion)))
+        // Shuffle after merging the categories, before the faulting
+        const toBeAdded = shuffleArray(split
+            .flatMap(balance =>
+                balance.flightPlans.slice(0, Math.round(this.desired.initial * balance.proportion))))
             .map((val, idx) => faults[idx] ? this.faulter.fault(val) : val)
             .map((plan, idx) => new DepartureFlightPlan(plan)
                 .setStart((idx + 1) * interval)
