@@ -83,6 +83,7 @@ or a hidden "Others" category.
 export interface BalanceCategory {
     types?: TrafficType[],
     fixes?: string[],
+    proportion: number, // Which fraction of the traffic should this receive?
 }
 
 export interface ApronMapping {

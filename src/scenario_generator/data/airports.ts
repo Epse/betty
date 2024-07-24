@@ -207,7 +207,8 @@ export default {
                 departureBalanceCategories: {
                     "25R": {
                         types: [ "GA", "Heavy", "Military" ],
-                        fixes: [ "ELSIK", "NIK", "HELEN", "DENUT", "KOK", "CIV" ]
+                        fixes: [ "ELSIK", "NIK", "HELEN", "DENUT", "KOK", "CIV" ],
+                        proportion: 0.5, // 50% goes to 25R, 50% to 19
                     },
                     // No category for 19, that receives the "Other" group
                 }
