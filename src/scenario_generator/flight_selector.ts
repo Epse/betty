@@ -113,7 +113,7 @@ export class FlightSelector {
         // Shuffle after merging the categories, before the faulting
         const toBeAdded = shuffleArray(split
             .flatMap(balance =>
-                balance.flightPlans.slice(0, Math.round(this.desired.initial * balance.proportion))))
+                balance.flightPlans.slice(0, Math.round(this.desired.ifrDepartures * balance.proportion))))
             .map((val, idx) => faults[idx] ? this.faulter.fault(val) : val)
             .map((plan, idx) => new DepartureFlightPlan(plan)
                 .setStart((idx + 1) * interval)
