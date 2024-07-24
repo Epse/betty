@@ -204,6 +204,13 @@ export default {
                         ebbr_25r_ifr
                     ],
                 },
+                departureBalanceCategories: {
+                    "25R": {
+                        types: [ "GA", "Heavy", "Military" ],
+                        fixes: [ "ELSIK", "NIK", "HELEN", "DENUT", "KOK", "CIV" ]
+                    },
+                    // No category for 19, that receives the "Other" group
+                }
             },
             "07DEP01ARR": {
                 "approaches": [
