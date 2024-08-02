@@ -15,7 +15,7 @@ export class BalanceSplitter {
     }
 
     public split(flightPlans: FlightPlan[]): BalancedPlan[] {
-        if (Object.keys(this.categories).length === 0) {
+        if (!this.categories || Object.keys(this.categories).length === 0) {
             return [{
                 proportion: 1.0,
                 flightPlans
