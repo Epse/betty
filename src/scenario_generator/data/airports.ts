@@ -10,7 +10,7 @@ const ebbr_25r_ifr: RouteDefinition = {
 }
 
 const ebbr_01_ifr: RouteDefinition = {
-    spawn: "50.9892884:4.9207760:3000:0:2848",
+    spawn: "50.6652211:4.4020126:2000:0:160",
     route: "BURUS/2000 BR01F RW01 ILS01",
     reqAlt: "BURUS:2000"
 }
