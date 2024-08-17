@@ -291,6 +291,7 @@ export default {
             {types: ["NonSchengen", "LowCost"], aprons: ["apron-P1-V-nonshengen"]}, // That typo is in the gate manager, ugh
             {types: ["NonSchengen"], aprons: ["apron-P1-A-nonshengen"]},
             {types: ["Medium"], aprons: ["apron-P1-A"]},
+            {types: [], aprons: ["apron-P1-V", "apron-P1-B"]},
         ],
         "elevation": "1234.0",
         "departureAltitude": "4000",
