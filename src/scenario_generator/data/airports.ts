@@ -146,7 +146,7 @@ export default {
             },
             "07S": {
                 "approaches": [
-                    "ILS07L: 50.8989561:4.4559023: 50.9127120:4.5031361",
+                    "ILS07L:50.8989561:4.4559023:50.9127120:4.5031361",
                     "ILS07R:50.8898451:4.4842205:50.8989886:4.5233715",
                 ],
                 "routeFiles": ["routesEBBR07s.txt",],
@@ -154,7 +154,7 @@ export default {
                     vfr: ebbr_vfr_not_01,
                     ifr: [
                         {
-                            spawn: "50.9892884:4.9207760:3000:0:2848",
+                            spawn: "50.8494893:4.0391772:2000:0:920",
                             route: "44BUB/660 ILS07L",
                             reqAlt: "44BUB:660"
                         }
@@ -171,7 +171,7 @@ export default {
                     vfr: ebbr_vfr_with_01,
                     ifr: [
                         {
-                            spawn: "50.9892884:4.9207760:3000:0:2848",
+                            spawn: "51.1359882:4.5930686:2500:0:2196",
                             route: "ILS19 BR19F RW19",
                             reqAlt: "VAMVO:2500",
                         }
@@ -330,9 +330,9 @@ export default {
                     }],
                     ifr: [
                         {
-                            spawn: "49.7262624:6.4830916:3000:0:2724",
-                            route: "LX24I/3000 LX24F ILS24",
-                            reqAlt: "LX24I:3000"
+                            spawn: "49.5197566:5.9288695:3000:0:680",
+                            route: "LX06I/3000 LX06F ILS06",
+                            reqAlt: "LX06I:3000"
                         }
                     ],
                 },
@@ -422,7 +422,7 @@ export default {
                     vfr: ebos_vfr,
                     ifr: [
                         {
-                            spawn: "49.7262624:6.4830916:3000:0:2724",
+                            spawn: "51.2521296:3.2270366:2500:0:2920",
                             reqAlt: "OS26F:2000",
                             route: "NOYON OS26F/2000 ILS26"
                         }
@@ -651,7 +651,7 @@ export default {
                     }],
                     ifr: [
                         {
-                            spawn: "50.5568592:4.7943158:3000:0:2812",
+                            spawn: "50.3816181:4.1859206:3000:0:744",
                             route: "REKPI CI06F/2500 ILS06",
                             reqAlt: "CI06F:2500"
                         }
@@ -690,7 +690,7 @@ export default {
                     ifr: [
                         {
                             spawn: "50.5568592:4.7943158:3000:0:2812",
-                            route: "VAMKA CI24F ILS24",
+                            route: "VAMKA CI24F/3000 ILS24",
                             reqAlt: "CI24F:3000"
                         }
                     ],
