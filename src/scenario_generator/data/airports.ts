@@ -731,7 +731,7 @@ export default {
             {types: ["Cargo"], aprons: ["apron-north"]},
             {types: [], aprons: ["apron-P1"]}, // Good enough
         ],
-        "departureAltitude": "5000",
+        "departureAltitude": "6000",
         "elevation": "651.0",
         "configurations": {
             "04R": {
