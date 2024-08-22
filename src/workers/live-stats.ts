@@ -52,7 +52,16 @@ function getAtisFields(data: any): APIEmbedField[] {
     return data['atis']
         .filter(atis => prefixMatches(atis['callsign']))
         .map(atis => {
-            const atis_letter = atis['atis_code'].toLowerCase();
+            const atis_code = atis['atis_code'];
+            if (!atis_code) {
+                return {
+                    name: `:question: ${atis['callsign']}`,
+                    value: atis['frequency'],
+                    inline: false,
+                };
+            }
+
+            const atis_letter = atis_code.toLowerCase();
             return {
                 name: `:regional_indicator_${atis_letter}: ${atis['callsign']}`,
                 value: atis['frequency'],
