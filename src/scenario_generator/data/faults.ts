@@ -48,7 +48,7 @@ export default [
     {
         name: "Wrong LoA: HELEN required for EHAM",
         applicable: isBrussels,
-        apply: routeLevelBadness("HELEN", "DENUT", "14000"),
+        apply: routeLevelBadness("EHAM", "DENUT", "14000"),
     },
     {
         name: "Wrong LoA: FL210 or below for EDDL, FL230 is filed",
