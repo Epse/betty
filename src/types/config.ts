@@ -19,7 +19,9 @@ export interface Config {
     },
     events: {
         // Where to post events threads, not announcements
-        announcement_channel_id: string
+        announcement_channel_id: string,
+        // Role IDs to automatically add to event threads
+        add_roles: string[],
     },
     /*
     Settings for auto-deletion of messages.
