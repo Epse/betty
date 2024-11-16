@@ -26,6 +26,7 @@ export default {
             });
             return;
         }
+        await interaction.deferReply({ephemeral: true})
 
         const startMessage = await channel.send({
             embeds: [new EmbedBuilder()
@@ -48,8 +49,12 @@ export default {
         if (interaction.member instanceof GuildMember) {
             await thread.members.add(interaction.member)
         }
+        for (const roleId of config.events.add_roles) {
+            const role = await interaction.guild.roles.fetch(roleId);
+                role.members.each(async member => await thread.members.add(member))
+        }
 
-        await interaction.reply({
+        await interaction.followUp({
             ephemeral: true,
             content: `Message posted: https://discord.com/channels/${startMessage.guildId}/${startMessage.channelId}/${startMessage.id}`
         });
