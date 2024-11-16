@@ -14,10 +14,20 @@ export default {
                     .setDescription('Title for the thread')
                     .setRequired(true)
             )
+            .addStringOption(option =>
+                option.setName('kind')
+                    .setChoices([
+                        {name: 'BOOKING', value: 'BOOKING'},
+                        {name: 'CPT', value: 'CPT'},
+                        {name: 'REQUEST', value: 'REQUEST'},
+                    ])
+                    .setRequired(false)
+            )
     ,
     execute: async interaction => {
         const channel = await interaction.client.channels.fetch(config.events.announcement_channel_id);
         const title = interaction.options.getString('title');
+        const kind = interaction.options.getString('kind') ?? 'BOOKING';
 
         if (channel === null || channel.type !== ChannelType.GuildText) {
             await interaction.reply({
@@ -34,7 +44,7 @@ export default {
         });
 
         const thread = await startMessage.startThread({
-            name: `[BOOKING] - ${title}`,
+            name: `[${kind}] - ${title}`,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
         });
         await thread.send({
