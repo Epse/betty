@@ -21,6 +21,7 @@ export default {
                         {name: 'CPT', value: 'CPT'},
                         {name: 'REQUEST', value: 'REQUEST'},
                     ])
+                    .setDescription('Kind of event')
                     .setRequired(false)
             )
     ,
