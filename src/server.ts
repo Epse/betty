@@ -8,7 +8,16 @@ import {events} from './events/events';
 import deleteMessages from './workers/delete-messages';
 import {liveStats} from "./workers/live-stats";
 
-const client: Client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
+const client: Client = new Client({
+    intents: [
+        // Needed for pretty much everything
+        GatewayIntentBits.Guilds,
+        // Used by the automatic voice channel moving, especially closing empty channels
+        GatewayIntentBits.GuildVoiceStates,
+        // Used to get members of a role
+        GatewayIntentBits.GuildMembers
+    ]
+});
 
 client.commands = new Collection();
 
