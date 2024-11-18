@@ -75,6 +75,8 @@ The live stats feature requires:
 - send messages
 - embed links
 
+Betty needs the GUILD_MEMBERS privileged intent in order to get the members of a role.
+
 ### Deployment
 
 Betty is available as a Docker image under `stefpletinck/betty`.

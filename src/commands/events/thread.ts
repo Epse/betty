@@ -60,9 +60,13 @@ export default {
         if (interaction.member instanceof GuildMember) {
             await thread.members.add(interaction.member)
         }
+        // This is stupid, but somehow makes it work... Slowly and needing the GuildMember intent
+        await interaction.guild.members.fetch();
         for (const roleId of config.events.add_roles) {
             const role = await interaction.guild.roles.fetch(roleId);
-                role.members.each(async member => await thread.members.add(member))
+            for (const [_, member] of role.members) {
+                await thread.members.add(member);
+            }
         }
 
         await interaction.followUp({
