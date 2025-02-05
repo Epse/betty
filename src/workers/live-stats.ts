@@ -2,6 +2,7 @@ import "../types/cache";
 import {APIEmbedField, BaseGuildTextChannel, Client, EmbedBuilder} from "discord.js";
 import {makeTimestamp, TimestampFormat} from "../util/timestamp";
 import config from "../util/config";
+import {call} from "node-stream-zip";
 
 function aggregateAirport(icao: string, data: any): APIEmbedField[] {
     const flightPlans = data['pilots'].filter(x => x['flight_plan'] != null).map(x => x['flight_plan']);
@@ -34,7 +35,7 @@ function aggregateAirport(icao: string, data: any): APIEmbedField[] {
 function prefixMatches(callsign: string): boolean {
     const prefix = callsign.split('_')[0];
     return config.activity.airports.findIndex(x => x === prefix) !== -1
-        || config.activity.additional_prefixes.findIndex(x => x === prefix) !== -1;
+        || config.activity.additional_prefixes.findIndex(x => callsign.startsWith(x)) !== -1;
 }
 
 function getControllerFields(data: any): APIEmbedField[] {
