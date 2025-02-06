@@ -20,4 +20,4 @@ jobs:
         SSH_KNOWN_HOSTS: ${{ env.SSH_KNOWN_HOSTS}}
       run: |
         git checkout main
-        git push -T --set-upstream git@gitlab.com:belux-vacc/belux-discord-bot.git main
+        git push --set-upstream git@gitlab.com:belux-vacc/belux-discord-bot.git main
