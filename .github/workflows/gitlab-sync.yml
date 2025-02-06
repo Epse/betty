@@ -18,5 +18,7 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{secrets.DEPLOY_KEY}}
       run: |
+        mkdir "~/.ssh"
+        ssh-keyscan gitlab.com > "~/.ssh/known_hosts"
         git checkout main
-        git push --set-upstream git@gitlab.com:belux-vacc/belux-discord-bot.git main
+        git push -T --set-upstream git@gitlab.com:belux-vacc/belux-discord-bot.git main

@@ -2,7 +2,6 @@ import "../types/cache";
 import {APIEmbedField, BaseGuildTextChannel, Client, EmbedBuilder} from "discord.js";
 import {makeTimestamp, TimestampFormat} from "../util/timestamp";
 import config from "../util/config";
-import {call} from "node-stream-zip";
 
 function aggregateAirport(icao: string, data: any): APIEmbedField[] {
     const flightPlans = data['pilots'].filter(x => x['flight_plan'] != null).map(x => x['flight_plan']);
