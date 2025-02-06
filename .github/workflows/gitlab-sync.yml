@@ -15,6 +15,8 @@ jobs:
         fetch-depth: 0
         fetch-tags: 1
     - name: Push to GitLab
+      env:
+        SSH_PRIVATE_KEY: ${{secrets.DEPLOY_KEY}}
       run: |
         git checkout main
-        git push --set-upstream https://Epse:${{ secrets.GITLAB_PA }}@gitlab.com/belux-vacc/belux-discord-bot.git main
+        git push --set-upstream git@gitlab.com:belux-vacc/belux-discord-bot.git main
