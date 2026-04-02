@@ -14,7 +14,7 @@ async function getStatsimLink(vatsimId: string): Promise<string> {
         console.warn("No Statsim API Key configured.");
         return "Not found";
     }
-    const response = await fetch(`https://statsim.net/api/Events/VatsimId?vatsimId=${vatsimId}`, {
+    const response = await fetch(`https://api.statsim.net/api/Events/VatsimId?vatsimId=${vatsimId}`, {
         headers: {
             "X-API-KEY": process.env.STATSIM_API_KEY,
         }
