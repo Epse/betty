@@ -18,7 +18,7 @@ export function pseudoPilotOption(option: SlashCommandStringOption): SlashComman
         .setDescription('Pseudo Pilot station')
         .setRequired(true)
         .setChoices(
-            ["EBBR_TWR", "EBBR_APP", "ELLX_APP", "EBLG_APP", "EBOS_APP", "EBBU_CTR"]
+            ["EBBR_N_TWR", "EBBR_S_TWR", "EBBR_APP", "ELLX_APP", "EBLG_APP", "EBOS_APP", "EBBU_CTR"]
                 .map(x => ({name: x, value: x}))
         );
 }
