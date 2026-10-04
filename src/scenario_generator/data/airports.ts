@@ -110,9 +110,9 @@ export default {
     "EBBR": {
         "atcGroup": "atcBRApp",
         apronMapping: [
-            {types: ["Cargo"], aprons: ["apron-9"]},
-            {types: ["GA"], aprons: ["apron-GA"]},
-            {types: ["Private"], aprons: ["apron-51b", "apron-51c"]},
+            {types: ["Cargo"], aprons: ["apron-9", "apron-60"]},
+            {types: ["GA"], aprons: ["apron-GA", "apron-51c"]},
+            {types: ["Private"], aprons: ["apron-GA", "apron-51c"]},
             {types: ["LowCost", "Schengen"], aprons: ["apron-1-north-low-cost"]},
             {types: ["Schengen"], aprons: ["apron-1-north", "apron-1-south"]},
             {types: [], aprons: ["apron-2-north", "apron-2-south"]}, // Fallback
@@ -286,10 +286,10 @@ export default {
         "atcGroup": "atcLXApp",
         apronMapping: [
             {types: ["Heavy"], aprons: ["apron-P1-V-heavy"]},
-            {types: ["GA", "Private"], aprons: ["apron-P5"]},
+            {types: ["GA", "Private"], aprons: ["apron-P5", "apron-P2"]},
             {types: ["Cargo"], aprons: ["apron-P10-Z"]},
-            {types: ["NonSchengen", "LowCost"], aprons: ["apron-P1-V-nonshengen"]}, // That typo is in the gate manager, ugh
-            {types: ["NonSchengen"], aprons: ["apron-P1-A-nonshengen"]},
+            {types: ["NonSchengen", "LowCost"], aprons: ["apron-P1-V", "apron-P1-V-cat-b"]},
+            {types: ["NonSchengen"], aprons: ["apron-P1-A-nonschengen"]},
             {types: ["Medium"], aprons: ["apron-P1-A"]},
             {types: [], aprons: ["apron-P1-V", "apron-P1-B"]},
         ],
